@@ -1,65 +1,285 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en" data-theme="teal"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Effort v. Impact — Meet the Pod</title>
 <style>
-:root{--paper:#0d141b;--teal:#22c3cf;--fog:#aeb9bf;--line:rgba(255,255,255,.12);}
-*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}
-body{background:var(--paper);color:#eef3f4;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow:hidden}
-.slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:8vh 9vw}
-.slide.active{display:flex}
-.slide-inner{max-width:62ch;width:100%}
-.eyebrow{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:18px}
-h1{font-size:clamp(30px,6vw,58px);line-height:1.05;letter-spacing:-.02em;font-weight:800;margin-bottom:22px;text-wrap:balance}
-.body{font-size:clamp(17px,2.3vw,22px);line-height:1.55;color:#dbe4e6}.body p{margin-bottom:12px}.body .muted{color:var(--fog);font-size:.9em}
-ul.themes{list-style:none;display:flex;flex-direction:column;gap:15px}ul.themes li{border-left:2px solid var(--teal);padding-left:16px}
-ul.themes .tier{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:3px}
-ul.themes .tt{display:block;font-weight:700;font-size:1.05em}ul.themes .td{display:block;color:var(--fog);font-size:.82em;margin-top:4px}
-ul.tension-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:6px}ul.tension-list li{border-left:2px solid var(--fog);padding-left:14px;font-size:.85em}
-ul.tension-list .tmeta{display:block;color:var(--fog);font-size:.82em;margin-top:2px}.body .tiny{font-size:.72em;letter-spacing:.03em;margin-top:14px}
-.slide.cover h1{font-size:clamp(38px,8vw,78px)}.slide.join .slide-inner{text-align:center}
-.nav{position:fixed;bottom:22px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:20px;z-index:5}
-.dots{display:flex;gap:9px}.dot{width:9px;height:9px;border-radius:50%;border:none;background:var(--line);cursor:pointer;padding:0}.dot.on{background:var(--teal)}
-.arrow{background:none;border:1px solid var(--line);color:#eef3f4;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1}.arrow:hover{border-color:var(--teal)}
-.brand{position:fixed;top:20px;left:26px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--fog)}.brand b{color:#eef3f4}
+:root{
+  --paper:#0b1117; --ink:#eef4f5; --ink2:#cdd9dc; --accent:#2ad2df; --accent-rgb:42,210,223;
+  --on-accent:#04222a; --fog:#93a3ab; --fog-dim:#5f6f78; --line:rgba(255,255,255,.09);
+  --card-bg:rgba(255,255,255,.02); --radius:14px; --head-font:inherit;
+  --accent-dim: rgba(var(--accent-rgb), .14);
+}
+html[data-theme="editorial"]{
+  --paper:#f6f1e9; --ink:#201c17; --ink2:#4a4030; --accent:#b8502f; --accent-rgb:184,80,47;
+  --on-accent:#fbf3ea; --fog:#6b6255; --fog-dim:#8f8574; --line:rgba(32,28,23,.14);
+  --card-bg:rgba(32,28,23,.035); --radius:3px; --head-font:Georgia,'Times New Roman',serif;
+}
+html[data-theme="minimal"]{
+  --paper:#ffffff; --ink:#0f1521; --ink2:#3c4551; --accent:#ff5a4e; --accent-rgb:255,90,78;
+  --on-accent:#ffffff; --fog:#5b6472; --fog-dim:#98a0ab; --line:rgba(15,21,33,.10);
+  --card-bg:rgba(15,21,33,.03); --radius:16px; --head-font:inherit;
+}
+html[data-theme="bold"]{
+  --paper:#120018; --ink:#f6ecff; --ink2:#d9c3ea; --accent:#ff2fb0; --accent-rgb:255,47,176;
+  --on-accent:#1c0524; --fog:#b79fc7; --fog-dim:#836f92; --line:rgba(255,255,255,.12);
+  --card-bg:rgba(255,255,255,.04); --radius:26px; --head-font:inherit;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(1100px 700px at 14% -10%, rgba(var(--accent-rgb),.10), transparent 60%),
+    radial-gradient(900px 600px at 100% 110%, rgba(var(--accent-rgb),.07), transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow:hidden;
+  counter-reset:slidenum;
+  transition:background .4s ease,color .4s ease;
+}
+.slide{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:9vh 9vw 12vh;opacity:0;pointer-events:none;
+  transform:translateY(10px) scale(.995);
+  transition:opacity .5s ease, transform .5s ease;
+  counter-increment:slidenum;
+}
+.slide.active{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+.slide-inner{max-width:74ch;width:100%;position:relative;z-index:1}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:20px}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--accent);opacity:.6}
+h1{font-family:var(--head-font);font-size:clamp(28px,4.6vw,46px);line-height:1.1;letter-spacing:-.02em;font-weight:800;margin-bottom:26px;text-wrap:balance}
+.body{font-size:clamp(15.5px,1.6vw,18px);line-height:1.6;color:var(--ink2)}
+.body p{margin-bottom:14px}
+.body .muted{color:var(--fog);font-size:.92em}
+.lede{font-size:clamp(18px,2.1vw,23px);line-height:1.5;color:var(--ink);font-weight:500;margin-bottom:18px}
+.tiny{font-size:11.5px;letter-spacing:.03em;color:var(--fog-dim);margin-top:18px}
+
+.paradox-card{border:1px solid var(--line);background:linear-gradient(180deg, rgba(var(--accent-rgb),.10), transparent 70%);border-radius:var(--radius);padding:26px 28px;margin-bottom:18px}
+.paradox-card p{font-size:clamp(17px,2vw,21px);line-height:1.5;color:var(--ink);font-weight:500;margin:0}
+.kicker{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{border:1px solid var(--line);background:var(--card-bg);border-radius:var(--radius);padding:18px 20px}
+.card .tag{display:inline-block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px}
+.card h3{font-family:var(--head-font);font-size:15.5px;font-weight:700;line-height:1.3;margin-bottom:6px;color:var(--ink)}
+.card p{font-size:13.3px;line-height:1.5;color:var(--fog);margin:0}
+
+.quote-row{display:flex;flex-direction:column;gap:10px;margin:16px 0 6px}
+.quote{border-left:2px solid var(--accent);padding:4px 0 4px 16px}
+.quote .q{font-size:14.5px;color:var(--ink);font-style:italic}
+.quote .d{font-size:12.5px;color:var(--fog);margin-top:3px}
+.stat-row{display:flex;gap:28px;margin-bottom:6px}
+.stat b{display:block;font-size:clamp(28px,4vw,40px);color:var(--accent);font-weight:800;line-height:1}
+.stat span{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--fog);margin-top:4px}
+
+.simple-list{list-style:none;display:flex;flex-direction:column;gap:13px;margin:14px 0 4px}
+.simple-list li{position:relative;padding-left:19px;font-size:13.6px;line-height:1.55;color:var(--ink2)}
+.simple-list li::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.simple-list li b{color:var(--ink);font-weight:600}
+.simple-list code{background:var(--card-bg);border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-size:.9em}
+
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:6px}
+.col h4{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:10px}
+.col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.col li{font-size:12.8px;line-height:1.45;color:var(--fog);border-left:1px solid var(--line);padding-left:10px}
+.col li b{color:var(--ink);font-weight:600}
+
+.numcards{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.numcard{display:flex;gap:16px;border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;background:var(--card-bg)}
+.numcard .n{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.numcard p{font-size:13.6px;line-height:1.5;color:var(--ink2);margin:0}
+.numcard p b{color:var(--ink)}
+
+.slide.cover h1{font-size:clamp(40px,7vw,72px)}
+.slide.cover .lede{max-width:56ch}
+.slide.join .slide-inner{text-align:center}
+.slide.join .lede{max-width:52ch;margin-left:auto;margin-right:auto}
+
+.btn{border:1px solid var(--accent);color:var(--on-accent);background:var(--accent);font-weight:700;font-size:13.5px;padding:11px 22px;border-radius:999px;letter-spacing:.02em}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+
+.brand{position:fixed;top:64px;left:28px;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fog-dim);z-index:5}
+.brand b{color:var(--ink)}
+.counter{position:fixed;top:64px;right:28px;font-size:11.5px;letter-spacing:.1em;color:var(--fog-dim);font-variant-numeric:tabular-nums;z-index:5}
+.counter b{color:var(--ink)}
+.progress{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:6;transition:width .5s ease,background .4s ease}
+.nav{position:fixed;bottom:26px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:22px;z-index:5}
+.dots{display:flex;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;border:none;background:var(--line);cursor:pointer;padding:0;transition:all .25s ease}
+.dot.on{background:var(--accent);width:20px;border-radius:4px}
+.arrow{background:var(--card-bg);border:1px solid var(--line);color:var(--ink);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:17px;line-height:1;transition:border-color .2s ease,background .2s ease}
+.arrow:hover{border-color:var(--accent);background:var(--accent-dim)}
+
+/* theme switcher chrome (always neutral so it reads on every theme) */
+.theme-switch{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:6px;background:rgba(10,10,16,.55);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);padding:6px;border-radius:999px}
+.theme-switch button{display:flex;align-items:center;gap:6px;border:1px solid transparent;background:transparent;color:rgba(255,255,255,.7);font-size:11px;letter-spacing:.04em;padding:6px 10px;border-radius:999px;cursor:pointer;font-family:inherit}
+.theme-switch button .sw{width:9px;height:9px;border-radius:50%;display:inline-block}
+.theme-switch button.on{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.18)}
+
+/* minimal theme: vertical side nav */
+html[data-theme="minimal"] .nav{left:30px;right:auto;bottom:auto;top:50%;transform:translateY(-50%);flex-direction:column;gap:16px}
+html[data-theme="minimal"] .dots{flex-direction:column}
+html[data-theme="minimal"] .dot.on{width:7px;height:20px;border-radius:4px}
+html[data-theme="minimal"] .arrow{transform:rotate(90deg)}
+html[data-theme="minimal"] .slide{padding-left:13vw}
+
+/* editorial theme: hairline under headline */
+html[data-theme="editorial"] h1{padding-bottom:16px;border-bottom:1px solid var(--line)}
+
+/* bold theme: oversized watermark numerals + heavier type */
+html[data-theme="bold"] h1{font-weight:900;letter-spacing:-.03em}
+html[data-theme="bold"] .slide::before{
+  content:counter(slidenum,decimal-leading-zero);position:absolute;right:1vw;bottom:-7vh;
+  font-size:32vw;font-weight:900;color:rgba(var(--accent-rgb),.08);line-height:1;
+  letter-spacing:-.04em;z-index:0;pointer-events:none;
+}
+
+@media (max-width:720px){.grid,.cols{grid-template-columns:1fr}.slide{padding:12vh 7vw 14vh}html[data-theme="minimal"] .slide{padding-left:7vw}.theme-switch{transform:translateX(-50%) scale(.85)}}
 </style></head>
 <body>
+
+<div class="theme-switch" id="themeSwitch">
+  <button data-theme="teal" class="on"><span class="sw" style="background:#2ad2df"></span>Teal</button>
+  <button data-theme="editorial"><span class="sw" style="background:#b8502f"></span>Editorial</button>
+  <button data-theme="minimal"><span class="sw" style="background:#ff5a4e"></span>Minimal</button>
+  <button data-theme="bold"><span class="sw" style="background:#ff2fb0"></span>Bold</button>
+</div>
+
 <div class="brand">The <b>Upskilling Labs</b> · Meet the Pod</div>
-<section class="slide cover active" data-i="0"><div class="slide-inner"><div class="eyebrow">Meet the Pod</div><h1>Effort v. Impact</h1><div class="body"><p>There are people who would engage if they felt discrete civic actions were 'worth' the effort they take based on the ability of that action to change outcomes.  Its an issue of information about what actions are avalible and access to a feedback loops on impact.  If I go to a protest, what happens?</p></div></div></section>
-<section class="slide para" data-i="1"><div class="slide-inner"><div class="eyebrow">The Paradox</div><h1>Why this stays stuck</h1><div class="body"><p>Civic engagement demands that individuals participate at scale so their input can be aggregated into legitimate collective decisions, but that same aggregation — the mechanism that makes participation matter at all — is what makes it impossible for any individual to perceive, or verify, their own causal contribution to the outcome.
+<div class="counter"><b id="curNum">01</b> / 07</div>
+<div class="progress" id="progress" style="width:14.28%"></div>
 
-It's kept alive by legislative and agency gatekeepers (staff who triage input with no capacity or mandate to trace it to a result) and by the donor/lobbying channel that offers decision-makers a clearer, faster, better-attributed feedback loop — so there's never enough institutional pressure to fix the public one, since the people with the most reach to change it are the ones least harmed by it staying broken.</p><p class="muted"><strong>Who benefits from the status quo:</strong> Unaccountable actors both public and private, but also this isn't a big scary unknowable lobbist issue, most places for engagment are begging for more folks to show up to board meetings, give comments, etc.  </p><p class="muted tiny">Sharpness self-check (pod-declared): 3/3</p></div></div></section>
-<section class="slide warrant" data-i="2"><div class="slide-inner"><div class="eyebrow">How we know</div><h1>The evidence is the warrant</h1><div class="body"><p>No client handed us this problem — the evidence did. This paradox was read off <strong>9 source extracts</strong> across <strong>1 named theme</strong>.</p><p class="muted">“Literacy Rates” — Baseline reading/civic literacy needed to navigate ballots and information</p><p class="muted">“Information Asymmetry?” — Hard to find out about local elections; too much national/federal</p><p class="muted tiny">Full trail: data/extracts.csv in our pod repo.</p></div></div></section>
-<section class="slide themes" data-i="3"><div class="slide-inner"><div class="eyebrow">What we found</div><h1>The themes beneath it</h1><div class="body"><ul class="themes"><li><span class="tier">Theme</span><span class="tt">What to say- and where to say it</span><span class="td">Underneath both patterns is the same unmet human need: people need to see a causal line between their own action and a consequence in the world in order to believe the action is worth taking — and at the local political scale, no infrastructure exists, on either end, to make that causal line visible. The front-end patterns fails to supply &quot;what would matter,&quot; the back-end pattern fails to supply &quot;did it matter&quot; — leaving the basic human requirement for legible efficacy structurally unmet, not because people lack the will to act, but because the system provides no evidence either direction.</span></li><li><span class="tier">Theme</span><span class="tt">Structural Opacity Converts Distance Into Threat</span><span class="td">When citizens cannot see how decisions, timelines, or out-of-jurisdiction elections actually operate, they fill the structural void with assumptions of malice, while those facing public exposure self-censor to protect themselves. This transforms routine civic friction into an unmanageable personal risk and widespread institutional distrust.</span></li><li><span class="tier">Theme</span><span class="tt">Unusable Civic Systems Exhaust Voter Bandwidth</span><span class="td">When the state designs electoral mechanics and information environments that demand excessive cognitive labor, everyday citizens cannot decode the process and are forced to abandon their political agency.</span></li><li><span class="tier">Pattern</span><span class="tt">What do I wan to say?</span><span class="td">People are exposed to information but lack a reliable way to convert it into a defensible opinion — the friction isn't that information is missing, it's that turning available information into a judgment requires either a skill (literacy) or a trustworthy shortcut (deference to experts), and both are unreliable under real conditions.</span></li></ul></div></div></section>
-<section class="slide field" data-i="4"><div class="slide-inner"><div class="eyebrow">The Field</div><h1>Who this touches</h1><div class="body"><p class="muted"><strong>Voices we still need:</strong> Political science on external efficacy
+<section class="slide cover active" data-i="0"><div class="slide-inner">
+  <div class="eyebrow">Meet the Pod</div>
+  <h1>Effort v. Impact</h1>
+  <div class="body"><p class="lede">Some people would engage — if they believed a given civic action was worth the effort. That's not apathy. It's a missing piece of information: what's available to do, and whether it worked. If I go to a protest, what actually happens?</p></div>
+</div></section>
 
-Start with the foundational construct, then the current debate:
+<section class="slide para" data-i="1"><div class="slide-inner">
+  <div class="eyebrow">The Paradox</div>
+  <h1>Why this stays stuck</h1>
+  <div class="body">
+    <div class="paradox-card"><span class="kicker">The self-undoing tension</span><p>Civic engagement needs mass participation to produce a legitimate outcome — but that same aggregation is exactly what makes it impossible for any one person to see their own causal contribution.</p></div>
+    <p class="muted">Kept alive by legislative and agency staff who triage input with no mandate to trace it to a result — and by a donor/lobbying channel that gives decision-makers a faster, clearer feedback loop than the public ever gets.</p>
+    <p class="muted"><strong>Who benefits:</strong> not just distant, unaccountable lobbyists — most local boards and meetings are begging for anyone to show up at all.</p>
+    <p class="tiny">Sharpness self-check (pod-declared): 3/3</p>
+  </div>
+</div></section>
 
-Political efficacy (Wikipedia overview) — good entry point for the internal/external distinction and its history (Campbell, Gurin, Miller's original 1954 formulation).
-The Efficacy Gap: Resentment and its Impact on External and Internal Political Efficacy (Kalaf-Hughes &amp; Leiter, 2025) — the most current academic treatment; argues resentment toward institutions is driving external efficacy down independent of internal efficacy, which is the exact split you're interested in.
-Who Feels They Can Understand and Have an Impact on Political Processes? (Oxford, IJPOR) — cross-national data across 46 countries, 1996–2016, useful if you want the socio-demographic patterning (education, income, gender) rather than just US data.
-OECD Working Paper No. 46: Political Efficacy and Participation — useful because it's explicitly policy-facing and connects efficacy to institutional design choices, not just psychology.
-Note one finding worth sitting with: external efficacy predicts conventional participation (voting, rallies) positively but predicts &quot;outside the system&quot; and digital participation negatively — i.e., people who've given up on responsiveness through normal channels don't necessarily disengage, they route around the system instead. That's directly relevant to your paradox framing.
+<section class="slide warrant" data-i="2"><div class="slide-inner">
+  <div class="eyebrow">How we know</div>
+  <h1>The evidence is the warrant</h1>
+  <div class="body">
+    <p>No client handed us this problem — the evidence did. 9 extracted signals went in; this is the one theme that came out.</p>
+    <div class="stat-row"><div class="stat"><b>9</b><span>Source extracts</span></div><div class="stat"><b>1</b><span>Named theme</span></div></div>
+    <ul class="simple-list">
+      <li><b>"Literacy Rates"</b> — baseline reading and civic literacy is what lets someone navigate a ballot or a notice in the first place. Without it, the barrier shows up before impact ever enters the picture.</li>
+      <li><b>"Information Asymmetry?"</b> — local elections get buried under the sheer volume of national and federal coverage, so people default to national news as their only civic signal.</li>
+      <li>The remaining <b>7 extracts</b> feed this same theme but weren't included in this export — they live in <code>data/extracts.csv</code> in the pod repo, not yet published alongside this deck.</li>
+    </ul>
+    <p class="tiny">Full trail: data/extracts.csv in our pod repo.</p>
+  </div>
+</div></section>
 
-Public opinion data
+<section class="slide themes" data-i="3"><div class="slide-inner">
+  <div class="eyebrow">What we found</div>
+  <h1>The themes beneath it</h1>
+  <div class="body">
+    <div class="grid">
+      <div class="card"><span class="tag">Theme</span><h3>What's available</h3><p>People need to know what civic actions exist and what each one would actually be trying to change. At the local level, that information mostly doesn't exist — so there's nothing to weigh the effort against.</p></div>
+      <div class="card"><span class="tag">Theme</span><h3>Whether it worked</h3><p>Even when someone acts, there's no feedback loop telling them whether it changed anything. Without that signal, there's no way to judge the action worth repeating — or worth trying at all.</p></div>
+    </div>
+  </div>
+</div></section>
 
-Pew: Public Trust in Government, 1958–2025 — the long time series; current trust reading is near the lowest in nearly 70 years of the series, with a sharp partisan split (Democrats' trust at a record low ~9%; Republicans under 50 much higher).
-Pew: How Americans Engage With News, Politics, Religion and Civic Life (July 2026) and the companion Engagement in Public Life is Linked With Views of Politics, News — brand new (this month), uses cluster analysis to sort people into engagement &quot;types,&quot; which could be a useful segmentation if you're trying to figure out who feels efficacious and why.
-Partnership for Public Service: State of Public Trust in Government 2025 — a practitioner-oriented companion to Pew, more focused on institutional performance than individual psychology.
+<section class="slide field" data-i="4"><div class="slide-inner">
+  <div class="eyebrow">The Field</div>
+  <h1>Voices we still need</h1>
+  <div class="body">
+    <p class="muted" style="margin-bottom:4px">Where to go deeper before we commit to a frame:</p>
+    <div class="cols">
+      <div class="col"><h4>Political science</h4><ul>
+        <li><b>Internal vs. external efficacy</b> — Campbell, Gurin &amp; Miller's original split</li>
+        <li><b>The Efficacy Gap</b> (Kalaf-Hughes &amp; Leiter, 2025) — resentment, not just structure, drives the drop</li>
+        <li><b>Cross-national patterning</b> (IJPOR, 46 countries) — education &amp; income effects</li>
+      </ul></div>
+      <div class="col"><h4>Public opinion</h4><ul>
+        <li><b>Pew:</b> trust in government near a 70-year low, sharp partisan split</li>
+        <li><b>Pew (2026):</b> engagement "types" — who feels efficacious, and why</li>
+        <li><b>Partnership for Public Service:</b> institutional-performance angle</li>
+      </ul></div>
+      <div class="col"><h4>Case studies</h4><ul>
+        <li><b>Porto Alegre</b> — participatory budgeting with real budget authority</li>
+        <li><b>vTaiwan</b> — closed the loop on scoped issues, stalled on hard ones</li>
+        <li><b>Deliberative Polling</b> — clearest paradigm for closing attribution</li>
+        <li><b>Counterweight:</b> Maji Matone — capacity ≠ willingness to respond</li>
+      </ul></div>
+    </div>
+  </div>
+</div></section>
 
-Positive case studies (fixed feedback loops, clear attribution)
+<section class="slide testing" data-i="5"><div class="slide-inner">
+  <div class="eyebrow">What we're still testing</div>
+  <h1>This is a live inquiry</h1>
+  <div class="body">
+    <p class="muted" style="margin-bottom:2px">We formed around evidence, not a brief — so we bring our open questions with us.</p>
+    <div class="numcards">
+      <div class="numcard"><span class="n">1</span><p><b>Unproven audience:</b> we're assuming there are people who'd engage more if the effort-to-impact math improved — untested.</p></div>
+      <div class="numcard"><span class="n">2</span><p><b>Epistemic vs. substantive:</b> maybe people aren't confused about impact — they know they lost, fairly, on substance. Better attribution just delivers bad news faster.</p></div>
+      <div class="numcard"><span class="n">3</span><p><b>Is closing the gap even good?</b> Individual causal weight in a mass democracy really is near zero. Proving that to people could depress participation further, not restore it.</p></div>
+    </div>
+  </div>
+</div></section>
 
-Porto Alegre, Brazil — the original participatory budgeting case, still the reference point because PB was integrated directly into municipal budget authority rather than being advisory, which is what made attribution legible (line items citizens voted on actually appeared in the budget). Overview via the Decision Lab case study on Rome's PB and the comparative analysis in Public Administration (2025), which is useful precisely because it's comparative — it tells you PB works well in some contexts and not others rather than presenting it as a universal fix.
-Taiwan's vTaiwan — probably your best &quot;closed loop&quot; example. Born out of the 2014 Sunflower Movement, run on the Polis platform, and by its own accounting produced &quot;decisive government action&quot; in roughly 80% of the ~26 policy issues it processed by 2018. See the Computational Democracy Project case study for the mechanics, but also read the Daily Beast piece calling it a &quot;huge flop&quot; for the counter-narrative — worth having both since the honest picture is &quot;worked well on scoped digital-economy issues, stalled on harder political fights.&quot;
-Deliberative Polling (James Fishkin) — the clearest academic paradigm for closing the attribution gap, because it randomly samples citizens, measures opinion before/after deliberation, and in several cases (UK crime policy 1994, Macau press regulation) governments explicitly adopted the resulting recommendation. Participedia's overview is the best single index of cases; the CGD piece on climate shows a more recent application.
-For the honest counterweight — where feedback loops were built but didn't hold — look at the Maji Matone project (Tanzania water-service SMS reporting) and the broader &quot;haves and have nots&quot; paper on civic tech and government responsiveness. The core finding across this literature: tech increases government's capacity to respond but does little for its willingness — which tells you the paradox isn't solved by better feedback infrastructure alone, it requires the responding institution to have skin in the game.</p></div></div></section>
-<section class="slide testing" data-i="5"><div class="slide-inner"><div class="eyebrow">What we're still testing</div><h1>This is a live inquiry</h1><div class="body"><p class="muted">We formed around evidence, not a brief — so we bring our open questions with us.</p><ul class="tension-list"><li>What could break this framing: I am assuming that there are folks out there who want to be more engaged and would given the right effort v. impact cost benefit. 
+<section class="slide join" data-i="6"><div class="slide-inner">
+  <div class="eyebrow">Join us</div>
+  <h1>Build with the Civics &amp; Elections: Signal Pool pod</h1>
+  <div class="body"><p class="lede">We're forming a pod around this paradox. If it pulls at you, come help us frame it — and find the problem owner who can actually move it.</p></div>
+</div></section>
 
-That the gap is epistemic, not substantive. I've assumed people feel powerless because they can't verify their causal contribution — an attribution problem. But it's equally plausible people know exactly what happened (their side lost a vote, got outspent, got outvoted) and the real issue is that they lost fair and square, repeatedly, on substance. If that's true, better attribution tools don't fix anything — they just deliver clearer bad news faster.
+<div class="nav">
+  <button class="arrow" id="prev" aria-label="Previous">‹</button>
+  <div class="dots" id="dots">
+    <button class="dot on" data-i="0" aria-label="Slide 1"></button>
+    <button class="dot" data-i="1" aria-label="Slide 2"></button>
+    <button class="dot" data-i="2" aria-label="Slide 3"></button>
+    <button class="dot" data-i="3" aria-label="Slide 4"></button>
+    <button class="dot" data-i="4" aria-label="Slide 5"></button>
+    <button class="dot" data-i="5" aria-label="Slide 6"></button>
+    <button class="dot" data-i="6" aria-label="Slide 7"></button>
+  </div>
+  <button class="arrow" id="next" aria-label="Next">›</button>
+</div>
 
-That closing the efficacy gap is good, full stop. I've treated low external efficacy as the disease. But the actual math is that any single person's causal weight in a mass democracy genuinely is close to zero — that's not a distortion, it's correct. Some democratic theory (this is a real fork, not just my hedge) argues legitimacy partly runs on people believing their vote matters more than it marginally does. If I built a perfect attribution system and it told most people &quot;your specific input changed nothing,&quot; that could depress participation further rather than restore it. I've been assuming the fix is more truth, without checking whether more truth helps.</li></ul></div></div></section>
-<section class="slide join" data-i="6"><div class="slide-inner"><div class="eyebrow">Join us</div><h1>Build with the Civics &amp; Elections: Signal Pool pod</h1><div class="body"><p>We're forming a pod around this paradox. If it pulls at you, come help us frame it — and find the problem owner who can move it.</p></div></div></section>
-<div class="nav"><button class="arrow" id="prev" aria-label="Previous">‹</button><div class="dots" id="dots"><button class="dot on" data-i="0" aria-label="Slide 1"></button><button class="dot" data-i="1" aria-label="Slide 2"></button><button class="dot" data-i="2" aria-label="Slide 3"></button><button class="dot" data-i="3" aria-label="Slide 4"></button><button class="dot" data-i="4" aria-label="Slide 5"></button><button class="dot" data-i="5" aria-label="Slide 6"></button><button class="dot" data-i="6" aria-label="Slide 7"></button></div><button class="arrow" id="next" aria-label="Next">›</button></div>
 <script>
-(function(){var slides=[].slice.call(document.querySelectorAll(".slide"));var dots=[].slice.call(document.querySelectorAll(".dot"));var i=0;function go(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach(function(s,k){s.classList.toggle("active",k===i);});dots.forEach(function(d,k){d.classList.toggle("on",k===i);});}document.getElementById("next").onclick=function(){go(i+1);};document.getElementById("prev").onclick=function(){go(i-1);};dots.forEach(function(d){d.onclick=function(){go(+d.getAttribute("data-i"));};});document.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key===" ")go(i+1);else if(e.key==="ArrowLeft")go(i-1);});})();
+(function(){
+  var slides=[].slice.call(document.querySelectorAll(".slide"));
+  var dots=[].slice.call(document.querySelectorAll(".dot"));
+  var progress=document.getElementById("progress");
+  var curNum=document.getElementById("curNum");
+  var i=0;
+  function go(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(s,k){s.classList.toggle("active",k===i);});
+    dots.forEach(function(d,k){d.classList.toggle("on",k===i);});
+    progress.style.width=((i+1)/slides.length*100)+"%";
+    curNum.textContent=String(i+1).padStart(2,"0");
+  }
+  document.getElementById("next").onclick=function(){go(i+1);};
+  document.getElementById("prev").onclick=function(){go(i-1);};
+  dots.forEach(function(d){d.onclick=function(){go(+d.getAttribute("data-i"));};});
+  document.addEventListener("keydown",function(e){
+    if(e.key==="ArrowRight"||e.key===" ")go(i+1);
+    else if(e.key==="ArrowLeft")go(i-1);
+  });
+
+  var themeBtns=[].slice.call(document.querySelectorAll(".theme-switch button"));
+  themeBtns.forEach(function(b){
+    b.onclick=function(){
+      document.documentElement.setAttribute("data-theme", b.getAttribute("data-theme"));
+      themeBtns.forEach(function(x){x.classList.toggle("on", x===b);});
+    };
+  });
+})();
 </script>
 </body></html>
