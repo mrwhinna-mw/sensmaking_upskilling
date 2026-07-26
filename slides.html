@@ -1,19 +1,19 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Effort v. Impact — Meet the Pod</title>
+<title>Effort v. Impact — Build with Full Circle</title>
 <style>
 :root{
-  --paper:#f6f1e9; --ink:#201c17; --ink2:#4a4030; --accent:#b8502f; --accent-rgb:184,80,47;
-  --on-accent:#fbf3ea; --fog:#6b6255; --fog-dim:#8f8574; --line:rgba(32,28,23,.14);
-  --card-bg:rgba(32,28,23,.035); --radius:3px; --head-font:Georgia,'Times New Roman',serif;
-  --accent-dim: rgba(var(--accent-rgb), .14);
+  --paper:#f6f2e6; --ink:#152238; --ink2:#3d4a63; --accent:#c1932f; --accent-rgb:193,147,47;
+  --on-accent:#152238; --fog:#5c6577; --fog-dim:#8b93a3; --line:rgba(21,34,56,.14);
+  --card-bg:rgba(21,34,56,.035); --radius:4px; --head-font:Georgia,'Times New Roman',serif;
+  --accent-dim: rgba(var(--accent-rgb), .16);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
   background:
-    radial-gradient(1100px 700px at 14% -10%, rgba(var(--accent-rgb),.08), transparent 60%),
-    radial-gradient(900px 600px at 100% 110%, rgba(var(--accent-rgb),.06), transparent 55%),
+    radial-gradient(1100px 700px at 14% -10%, rgba(var(--accent-rgb),.09), transparent 60%),
+    radial-gradient(900px 600px at 100% 110%, rgba(21,34,56,.06), transparent 55%),
     var(--paper);
   color:var(--ink);
   font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -26,42 +26,46 @@ body{
   transition:opacity .5s ease, transform .5s ease;
 }
 .slide.active{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
-.slide-inner{max-width:74ch;width:100%;position:relative;z-index:1}
+.slide-inner{max-width:76ch;width:100%;position:relative;z-index:1}
 .eyebrow{display:flex;align-items:center;gap:10px;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:20px}
-.eyebrow::before{content:"";width:22px;height:1px;background:var(--accent);opacity:.6}
-h1{font-family:var(--head-font);font-size:clamp(28px,4.6vw,46px);line-height:1.1;letter-spacing:-.02em;font-weight:800;margin-bottom:26px;text-wrap:balance;padding-bottom:16px;border-bottom:1px solid var(--line)}
-.body{font-size:clamp(15.5px,1.6vw,18px);line-height:1.6;color:var(--ink2)}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--accent);opacity:.7}
+h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.12;letter-spacing:-.01em;font-weight:700;margin-bottom:24px;text-wrap:balance;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.body{font-size:clamp(15px,1.5vw,17.5px);line-height:1.6;color:var(--ink2)}
 .body p{margin-bottom:14px}
 .body .muted{color:var(--fog);font-size:.92em}
-.lede{font-size:clamp(18px,2.1vw,23px);line-height:1.5;color:var(--ink);font-weight:500;margin-bottom:18px}
-.tiny{font-size:11.5px;letter-spacing:.03em;color:var(--fog-dim);margin-top:18px}
+.lede{font-size:clamp(17px,2vw,21px);line-height:1.5;color:var(--ink);font-weight:500;margin-bottom:18px}
+.tiny{font-size:11.5px;letter-spacing:.03em;color:var(--fog-dim);margin-top:16px}
 
-.paradox-card{border:1px solid var(--line);background:linear-gradient(180deg, rgba(var(--accent-rgb),.10), transparent 70%);border-radius:var(--radius);padding:26px 28px;margin-bottom:18px}
-.paradox-card p{font-size:clamp(17px,2vw,21px);line-height:1.5;color:var(--ink);font-weight:500;margin:0}
-.kicker{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+/* icons */
+.icon{width:24px;height:24px;flex:none;color:var(--accent)}
+.icon-sm{width:17px;height:17px;flex:none;color:var(--accent)}
+
+/* signal mark (Full Circle motif) */
+.signal{width:64px;height:64px;position:relative}
+.signal .ring{position:absolute;inset:0;border:1.5px solid var(--accent);border-radius:50%;opacity:0;animation:signalPulse 3.2s ease-out infinite}
+.signal .ring:nth-child(2){animation-delay:1.05s}
+.signal .ring:nth-child(3){animation-delay:2.1s}
+.signal .core{position:absolute;inset:42%;background:var(--accent);border-radius:50%}
+@keyframes signalPulse{0%{transform:scale(.35);opacity:.85}75%{opacity:0}100%{transform:scale(1.8);opacity:0}}
+.signal--corner{position:absolute;top:8vh;right:8vw;opacity:.85;z-index:0}
+
+/* concept cards (paradox slide) */
+.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 18px}
+.concept-card{border:1px solid var(--line);background:linear-gradient(180deg, rgba(var(--accent-rgb),.09), transparent 75%);border-radius:var(--radius);padding:20px 22px}
+.concept-card .icon{margin-bottom:12px}
+.concept-card h3{font-family:var(--head-font);font-size:16px;font-weight:700;margin-bottom:8px;color:var(--ink)}
+.concept-card p{font-size:13.4px;line-height:1.55;color:var(--ink2);margin:0}
+.kicker{display:inline-block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px}
 
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .card{border:1px solid var(--line);background:var(--card-bg);border-radius:var(--radius);padding:18px 20px}
+.card .icon{margin-bottom:10px}
 .card .tag{display:inline-block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px}
 .card h3{font-family:var(--head-font);font-size:15.5px;font-weight:700;line-height:1.3;margin-bottom:6px;color:var(--ink)}
 .card p{font-size:13.3px;line-height:1.5;color:var(--fog);margin:0}
 
-.quote-row{display:flex;flex-direction:column;gap:10px;margin:16px 0 6px}
-.quote{border-left:2px solid var(--accent);padding:4px 0 4px 16px}
-.quote .q{font-size:14.5px;color:var(--ink);font-style:italic}
-.quote .d{font-size:12.5px;color:var(--fog);margin-top:3px}
-.stat-row{display:flex;gap:28px;margin-bottom:6px}
-.stat b{display:block;font-size:clamp(28px,4vw,40px);color:var(--accent);font-weight:800;line-height:1}
-.stat span{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--fog);margin-top:4px}
-
-.simple-list{list-style:none;display:flex;flex-direction:column;gap:13px;margin:14px 0 4px}
-.simple-list li{position:relative;padding-left:19px;font-size:13.6px;line-height:1.55;color:var(--ink2)}
-.simple-list li::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
-.simple-list li b{color:var(--ink);font-weight:600}
-.simple-list code{background:var(--card-bg);border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-size:.9em}
-
 .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:6px}
-.col h4{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:10px}
+.col h4{display:flex;align-items:center;gap:8px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:10px}
 .col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
 .col li{font-size:12.5px;line-height:1.5;color:var(--fog);border-left:1px solid var(--line);padding-left:10px}
 .col li b{color:var(--ink);font-weight:600}
@@ -73,13 +77,21 @@ h1{font-family:var(--head-font);font-size:clamp(28px,4.6vw,46px);line-height:1.1
 .numcard p{font-size:13.6px;line-height:1.5;color:var(--ink2);margin:0}
 .numcard p b{color:var(--ink)}
 
-.slide.cover h1{font-size:clamp(40px,7vw,72px)}
-.slide.cover .lede{max-width:56ch}
+.slide.cover h1{font-size:clamp(38px,6.6vw,68px)}
+.slide.cover .lede{max-width:58ch}
 .slide.join .slide-inner{text-align:center}
-.slide.join .lede{max-width:52ch;margin-left:auto;margin-right:auto}
+.slide.join .lede{max-width:54ch;margin-left:auto;margin-right:auto}
+.slide.join h1{border-bottom:none}
 
-.btn{border:1px solid var(--accent);color:var(--on-accent);background:var(--accent);font-weight:700;font-size:13.5px;padding:11px 22px;border-radius:999px;letter-spacing:.02em}
-.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn{display:inline-block;border:1px solid var(--accent);color:var(--on-accent);background:var(--accent);font-weight:700;font-size:13.5px;padding:11px 24px;border-radius:999px;letter-spacing:.02em}
+
+.star-flourish{position:absolute;top:-8vh;right:-3vw;width:260px;height:260px;color:var(--accent);opacity:.09;z-index:0;pointer-events:none}
+
+.roadmap{display:flex;align-items:flex-start;gap:0;margin-top:26px;position:relative;justify-content:center}
+.roadmap::before{content:"";position:absolute;top:5px;left:8%;right:8%;height:1px;background:var(--line)}
+.roadmap-step{flex:1;max-width:150px;text-align:center;position:relative}
+.roadmap-step .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);margin:0 auto 10px;position:relative;z-index:1;border:2px solid var(--paper)}
+.roadmap-step span{display:block;font-size:11.5px;letter-spacing:.03em;color:var(--fog);font-weight:600;line-height:1.35}
 
 .brand{position:fixed;top:22px;left:28px;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fog-dim);z-index:5}
 .brand b{color:var(--ink)}
@@ -93,7 +105,7 @@ h1{font-family:var(--head-font);font-size:clamp(28px,4.6vw,46px);line-height:1.1
 .arrow{background:var(--card-bg);border:1px solid var(--line);color:var(--ink);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:17px;line-height:1;transition:border-color .2s ease,background .2s ease}
 .arrow:hover{border-color:var(--accent);background:var(--accent-dim)}
 
-@media (max-width:720px){.grid,.cols{grid-template-columns:1fr}.slide{padding:12vh 7vw 14vh}}
+@media (max-width:720px){.grid,.cols,.concept-grid{grid-template-columns:1fr}.slide{padding:12vh 7vw 14vh}.roadmap{flex-wrap:wrap}.signal--corner{display:none}}
 </style></head>
 <body>
 
@@ -101,40 +113,55 @@ h1{font-family:var(--head-font);font-size:clamp(28px,4.6vw,46px);line-height:1.1
 <div class="counter"><b id="curNum">01</b> / 07</div>
 <div class="progress" id="progress" style="width:14.28%"></div>
 
-<section class="slide cover active" data-i="0"><div class="slide-inner">
+<section class="slide cover active" data-i="0">
+  <div class="signal signal--corner" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="ring"></span><span class="core"></span></div>
+  <div class="slide-inner">
   <div class="eyebrow">Meet the Pod</div>
   <h1>Effort v. Impact</h1>
-  <div class="body"><p class="lede">Some people would engage — if they believed a given civic action was worth the effort. That's not apathy. It's a missing piece of information: what's available to do, and whether it worked. If I go to a protest, what actually happens?</p></div>
+  <div class="body"><p class="lede">Some people would engage — if they believed a given civic action was worth the effort. The barriers are too high and the incentives are too low: it takes real effort just to find out what's available and whether it matters — and when the feedback loop is broken, people stop trying because they never see the result of their effort. If I go to a protest, what actually happens?</p></div>
 </div></section>
 
 <section class="slide para" data-i="1"><div class="slide-inner">
   <div class="eyebrow">The Paradox</div>
-  <h1>Why this stays stuck</h1>
+  <h1>Why This Stays Stuck</h1>
   <div class="body">
-    <div class="paradox-card"><span class="kicker">The self-undoing tension</span><p>Civic engagement needs mass participation to produce a legitimate outcome — but that same aggregation is exactly what makes it impossible for any one person to see their own causal contribution.</p></div>
-    <p class="muted">Kept alive by legislative and agency staff who triage input with no mandate to trace it to a result — and by a donor/lobbying channel that gives decision-makers a faster, clearer feedback loop than the public ever gets.</p>
-    <p class="muted"><strong>Who benefits:</strong> not just distant, unaccountable lobbyists — most local boards and meetings are begging for anyone to show up at all.</p>
-    <p class="tiny">Sharpness self-check (pod-declared): 3/3</p>
+    <p class="lede">Two forces work together to keep people out — and each one makes the other worse.</p>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M5 8h14M5 8l-3 6a3 3 0 006 0l-3-6zM19 8l-3 6a3 3 0 006 0l-3-6zM8 21h8M12 6v15"/></svg>
+        <span class="kicker">Concept 1</span>
+        <h3>It's rational to opt out</h3>
+        <p>When it takes real work to find out what to do — and there's no way to tell if it worked — stepping back is the sensible choice. That's not laziness. It's people making a reasonable call with limited time and no information.</p>
+      </div>
+      <div class="concept-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/></svg>
+        <span class="kicker">Concept 2</span>
+        <h3>It only works if we all show up</h3>
+        <p>Civic engagement pays off when enough people take part — one vote or one comment rarely moves anything on its own. So everyone waits for someone else to go first, and nothing moves.</p>
+      </div>
+    </div>
+    <p class="muted"><strong>Why it sticks around:</strong> this isn't really about people who don't care — it's a data problem. Most people don't know where to act, how much effort it takes, what the likely impact is, or what actually happened afterward. Without that information, stepping back is the rational choice. It's also worth saying plainly: some elected officials do benefit when the public stays uninformed and disorganized.</p>
+    <p class="muted"><strong>What's actually going on:</strong> this mostly isn't a story about people working to keep the public out. Most civic leaders and local officials genuinely want more people involved — they're stuck in the same broken loop, watching empty board meetings and comment periods nobody fills. What they're missing isn't the will. It's the marketing budget and the reach to get the word out.</p>
   </div>
 </div></section>
 
 <section class="slide warrant" data-i="2"><div class="slide-inner">
-  <div class="eyebrow">How we know</div>
-  <h1>The evidence is the warrant</h1>
+  <div class="eyebrow">How We Know</div>
+  <h1>The Research Backs This Up</h1>
   <div class="body">
-    <p>This isn't just our read of the room — it's backed by existing research across three fronts.</p>
+    <p>This isn't just our read of the room — three separate bodies of research point the same direction.</p>
     <div class="cols">
-      <div class="col"><h4>Political science</h4><ul>
-        <li><b>The Efficacy Gap</b> (Kalaf-Hughes &amp; Leiter, 2025) — resentment toward institutions drives external efficacy down, independent of whether people trust their own competence to participate.</li>
-        <li><b>Cross-national data</b> (IJPOR, 46 countries) — low external efficacy doesn't kill participation, it reroutes it "outside the system."</li>
+      <div class="col"><h4><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10M20 21V10M12 3l9 5H3l9-5zM8 21v-7M12 21v-7M16 21v-7"/></svg>Political science</h4><ul>
+        <li><b>Communities solve shared problems on their own</b> — but only when people can see the rules, the effort involved, and whether it's working. (Elinor Ostrom, Nobel Prize–winning research on collective action)</li>
+        <li>When people believe the usual channels won't respond, they don't disappear — they redirect into protests, boycotts, and action outside the system. The impulse to act doesn't go away; it just moves.</li>
       </ul></div>
-      <div class="col"><h4>Public opinion</h4><ul>
+      <div class="col"><h4><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4V5z"/></svg>Public opinion</h4><ul>
         <li><b>Pew:</b> trust in government sits near a 70-year low, with a sharp partisan split — this is the dominant public mood, not a fringe complaint.</li>
-        <li><b>Pew (2026):</b> the most civically active people are also among the most anxious about whether any of it matters.</li>
+        <li><b>Pew (2026):</b> the most civically active people are also among the most anxious about whether any of it matters — engagement and doubt travel together, not apart.</li>
       </ul></div>
-      <div class="col"><h4>Case studies</h4><ul>
-        <li><b>vTaiwan</b> closed the loop on roughly 80% of scoped digital-policy issues — proof attribution is buildable, not just theoretical.</li>
-        <li><b>Porto Alegre's</b> participatory budgeting made citizen votes show up as literal line items in the budget.</li>
+      <div class="col"><h4><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.5 7-12a7 7 0 10-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg>Case studies</h4><ul>
+        <li><b>vTaiwan</b> invites citizens, experts, and officials to work through a specific issue online, surfaces the ideas that get broad agreement, and commits the government to act on it — turning public consensus into real national policy, including new ride-sharing rules that ended a years-long standoff with taxi drivers.</li>
+        <li><b>Porto Alegre, Brazil</b> lets residents vote directly on city spending — and those votes become real line items in the budget, not a suggestion box nobody reads.</li>
       </ul></div>
     </div>
     <p class="tiny">Nine internal extracts back this too — full trail in data/extracts.csv, pod repo.</p>
@@ -142,61 +169,77 @@ h1{font-family:var(--head-font);font-size:clamp(28px,4.6vw,46px);line-height:1.1
 </div></section>
 
 <section class="slide themes" data-i="3"><div class="slide-inner">
-  <div class="eyebrow">What we found</div>
-  <h1>The themes beneath it</h1>
+  <div class="eyebrow">What We Found</div>
+  <h1>The Themes Beneath It</h1>
   <div class="body">
     <div class="grid">
-      <div class="card"><span class="tag">Theme</span><h3>What's available</h3><p>People need to know what civic actions exist and what each one would actually be trying to change. At the local level, that information mostly doesn't exist — so there's nothing to weigh the effort against.</p></div>
-      <div class="card"><span class="tag">Theme</span><h3>Whether it worked</h3><p>Even when someone acts, there's no feedback loop telling them whether it changed anything. Without that signal, there's no way to judge the action worth repeating — or worth trying at all.</p></div>
+      <div class="card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L20 20"/></svg>
+        <span class="tag">Theme</span><h3>What's available</h3><p>People need to know what civic actions exist and what each one would actually be trying to change. At the local level, that information mostly doesn't exist — so there's nothing to weigh the effort against.</p></div>
+      <div class="card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+        <span class="tag">Theme</span><h3>Whether it worked</h3><p>Even when someone acts, there's no feedback loop telling them whether it changed anything. Without that signal, there's no way to judge the action worth repeating — or worth trying at all.</p></div>
     </div>
   </div>
 </div></section>
 
 <section class="slide field" data-i="4"><div class="slide-inner">
   <div class="eyebrow">The Field</div>
-  <h1>Voices we still need</h1>
+  <h1>Voices We Still Need</h1>
   <div class="body">
     <p class="muted" style="margin-bottom:4px">The open questions in each area before we commit to a frame:</p>
     <div class="cols">
-      <div class="col"><h4>Political science</h4><ul>
-        <li class="q">Is the efficacy gap really about attribution — or are people just correctly registering that their causal weight is near zero?</li>
-        <li class="q">Does resentment toward institutions drive disengagement, or does disengagement drive the resentment?</li>
-        <li class="q">Does this hold outside the U.S., or is it a symptom of our specific institutional design (single-member districts, gerrymandering)?</li>
-        <li class="q">If external efficacy went up, would engagement rise — or just shift "outside the system"?</li>
+      <div class="col"><h4><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10M20 21V10M12 3l9 5H3l9-5zM8 21v-7M12 21v-7M16 21v-7"/></svg>Political science</h4><ul>
+        <li class="q">Are people disengaging because they've lost trust, or because they don't have enough information to act?</li>
+        <li class="q">Does low trust drive people to disengage, or does disengaging drive the low trust — which comes first?</li>
+        <li class="q">Does this pattern hold outside the U.S., or is it shaped by how our specific system works (district lines, election rules)?</li>
+        <li class="q">If the payoff became clearer, would more people get involved — or would they just redirect their energy elsewhere?</li>
       </ul></div>
-      <div class="col"><h4>Public opinion</h4><ul>
-        <li class="q">Do people distrust government because they can't attribute their impact, or because they've lost on substance and know it?</li>
-        <li class="q">Is the "civically active but anxious" cluster anxious about this paradox specifically, or for unrelated reasons?</li>
-        <li class="q">Would showing people an honest account of their impact increase participation, or kill it?</li>
-        <li class="q">Does distrust hold at the local level too, where feedback loops are naturally shorter?</li>
+      <div class="col"><h4><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4V5z"/></svg>Public opinion</h4><ul>
+        <li class="q">Do people distrust government because they can't see their impact, or because they've lost on the merits and know it?</li>
+        <li class="q">Is the "engaged but anxious" group anxious about this specific problem, or for unrelated reasons?</li>
+        <li class="q">Would showing people an honest account of their impact bring more people in, or discourage them?</li>
+        <li class="q">Does distrust hold at the local level too, where the feedback loop is naturally faster?</li>
       </ul></div>
-      <div class="col"><h4>Case studies</h4><ul>
-        <li class="q">Why did vTaiwan work on scoped digital issues but stall on harder fights — a tooling limit, or a power limit?</li>
-        <li class="q">Does Porto Alegre-style budgeting generalize, or was it bound to a specific political moment?</li>
-        <li class="q">Did deliberative polling's adopted recommendations actually deliver — or fade after implementation?</li>
-        <li class="q">Has closing a feedback loop ever backfired — made people more cynical once they could see clearly that they'd lost?</li>
+      <div class="col"><h4><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.5 7-12a7 7 0 10-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg>Case studies</h4><ul>
+        <li class="q">vTaiwan works well on contained, technical issues — would the same approach hold up on bigger, more divisive fights?</li>
+        <li class="q">Does Porto Alegre-style budgeting work anywhere, or was its success tied to one specific political moment?</li>
+        <li class="q">When communities like this succeed, does the benefit last — or fade once the initial excitement wears off?</li>
+        <li class="q">Has making impact visible ever backfired — made people more discouraged once they could see clearly they hadn't won?</li>
       </ul></div>
     </div>
   </div>
 </div></section>
 
 <section class="slide testing" data-i="5"><div class="slide-inner">
-  <div class="eyebrow">What we're still testing</div>
-  <h1>This is a live inquiry</h1>
+  <div class="eyebrow">Open Questions</div>
+  <h1>The Assumptions Behind This Pitch</h1>
   <div class="body">
-    <p class="muted" style="margin-bottom:2px">We formed around evidence, not a brief — so we bring our open questions with us.</p>
+    <p class="muted" style="margin-bottom:2px">We built this case on real evidence — but also on a few bets we haven't proven yet.</p>
     <div class="numcards">
-      <div class="numcard"><span class="n">1</span><p><b>Unproven audience:</b> we're assuming there are people who'd engage more if the effort-to-impact math improved — untested.</p></div>
-      <div class="numcard"><span class="n">2</span><p><b>Epistemic vs. substantive:</b> maybe people aren't confused about impact — they know they lost, fairly, on substance. Better attribution just delivers bad news faster.</p></div>
-      <div class="numcard"><span class="n">3</span><p><b>Is closing the gap even good?</b> Individual causal weight in a mass democracy really is near zero. Proving that to people could depress participation further, not restore it.</p></div>
+      <div class="numcard"><span class="n">1</span><p><b>There's a real audience:</b> we're assuming there are people who'd get involved if they simply knew how — not people who've already decided they don't care.</p></div>
+      <div class="numcard"><span class="n">2</span><p><b>Engagement is worth encouraging:</b> we're assuming civic engagement is genuinely good — that more participation leads to better outcomes, not just more noise.</p></div>
+      <div class="numcard"><span class="n">3</span><p><b>Visible results won't backfire:</b> we're assuming clear feedback on impact helps people build the habit of showing up. It might instead teach people to only act when a payoff is guaranteed — and tune out everything else.</p></div>
     </div>
   </div>
 </div></section>
 
-<section class="slide join" data-i="6"><div class="slide-inner">
-  <div class="eyebrow">Join us</div>
-  <h1>Build with the Civics &amp; Elections: Signal Pool pod</h1>
-  <div class="body"><p class="lede">We're forming a pod around this paradox. If it pulls at you, come help us frame it — and find the problem owner who can actually move it.</p></div>
+<section class="slide join" data-i="6">
+  <svg class="star-flourish" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg>
+  <div class="slide-inner">
+  <div class="eyebrow" style="justify-content:center">Join Us</div>
+  <h1>Build with the Civics &amp; Elections: "Full Circle" Pod</h1>
+  <div class="body">
+    <p class="lede">We're forming a pod to close this loop — not study it forever. If this pulls at you, help us sharpen the frame and find the person with the power to act on it.</p>
+    <p><span class="btn">Join the Full Circle Pod</span></p>
+    <p class="tiny" style="margin-top:26px;text-transform:uppercase;letter-spacing:.14em;font-weight:700">What's next</p>
+    <div class="roadmap">
+      <div class="roadmap-step"><span class="dot"></span><span>Build the frame</span></div>
+      <div class="roadmap-step"><span class="dot"></span><span>Picture the future</span></div>
+      <div class="roadmap-step"><span class="dot"></span><span>Redesign the system</span></div>
+      <div class="roadmap-step"><span class="dot"></span><span>Launch and learn</span></div>
+    </div>
+  </div>
 </div></section>
 
 <div class="nav">
