@@ -87,11 +87,27 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
 
 .star-flourish{position:absolute;top:-8vh;right:-3vw;width:260px;height:260px;color:var(--accent);opacity:.09;z-index:0;pointer-events:none}
 
-.roadmap{display:flex;align-items:flex-start;gap:0;margin-top:26px;position:relative;justify-content:center}
-.roadmap::before{content:"";position:absolute;top:5px;left:8%;right:8%;height:1px;background:var(--line)}
-.roadmap-step{flex:1;max-width:150px;text-align:center;position:relative}
-.roadmap-step .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);margin:0 auto 10px;position:relative;z-index:1;border:2px solid var(--paper)}
-.roadmap-step span{display:block;font-size:11.5px;letter-spacing:.03em;color:var(--fog);font-weight:600;line-height:1.35}
+.slide.join .slide-inner{max-width:min(1180px,92vw)}
+
+.timeline{width:100%;margin-top:18px}
+.timeline-headers{display:grid;grid-template-columns:repeat(13,1fr);margin-bottom:34px;text-align:left}
+.timeline-headers .grp{grid-column:span 4;padding-right:14px}
+.timeline-headers .grp:last-child{grid-column:span 5}
+.timeline-headers .grp + .grp{border-left:1px solid var(--line);padding-left:14px}
+.timeline-headers .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:3px}
+.timeline-headers .ttl{font-family:var(--head-font);font-size:13px;font-weight:700;color:var(--ink);line-height:1.25}
+.timeline-track{display:grid;grid-template-columns:repeat(13,1fr);position:relative;padding:40px 0}
+.timeline-track::before{content:"";position:absolute;left:2%;right:2%;top:50%;height:1px;background:var(--line);transform:translateY(-50%)}
+.timeline-node{display:flex;justify-content:center;position:relative}
+.timeline-node .circle{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);color:var(--fog);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;position:relative;z-index:1}
+.timeline-node.active .circle{width:32px;height:32px;background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:0 0 0 6px var(--accent-dim);font-size:12px}
+.timeline-node .label{position:absolute;left:50%;transform:translateX(-50%);width:86px;text-align:center;font-size:9.5px;line-height:1.3}
+.timeline-node .label.above{bottom:calc(100% + 8px)}
+.timeline-node .label.below{top:calc(100% + 8px)}
+.timeline-node .label .wk{display:block;font-weight:700;color:var(--fog-dim);letter-spacing:.04em;text-transform:uppercase;font-size:9px;margin-bottom:2px}
+.timeline-node.active .label .wk{color:var(--accent)}
+.timeline-node .label .name{display:block;font-weight:600;color:var(--fog)}
+.timeline-node.active .label .name{color:var(--ink);font-weight:700}
 
 .brand{position:fixed;top:22px;left:28px;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fog-dim);z-index:5}
 .brand b{color:var(--ink)}
@@ -105,7 +121,7 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
 .arrow{background:var(--card-bg);border:1px solid var(--line);color:var(--ink);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:17px;line-height:1;transition:border-color .2s ease,background .2s ease}
 .arrow:hover{border-color:var(--accent);background:var(--accent-dim)}
 
-@media (max-width:720px){.grid,.cols,.concept-grid{grid-template-columns:1fr}.slide{padding:12vh 7vw 14vh}.roadmap{flex-wrap:wrap}.signal--corner{display:none}}
+@media (max-width:720px){.grid,.cols,.concept-grid{grid-template-columns:1fr}.slide{padding:12vh 7vw 14vh}.signal--corner{display:none}}
 </style></head>
 <body>
 
@@ -140,8 +156,8 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
         <p>Civic engagement pays off when enough people take part — one vote or one comment rarely moves anything on its own. So everyone waits for someone else to go first, and nothing moves.</p>
       </div>
     </div>
-    <p class="muted"><strong>Why it sticks around:</strong> this isn't really about people who don't care — it's a data problem. Most people don't know where to act, how much effort it takes, what the likely impact is, or what actually happened afterward. Without that information, stepping back is the rational choice. It's also worth saying plainly: some elected officials do benefit when the public stays uninformed and disorganized.</p>
-    <p class="muted"><strong>What's actually going on:</strong> this mostly isn't a story about people working to keep the public out. Most civic leaders and local officials genuinely want more people involved — they're stuck in the same broken loop, watching empty board meetings and comment periods nobody fills. What they're missing isn't the will. It's the marketing budget and the reach to get the word out.</p>
+    <p class="muted"><strong>Why it sticks around:</strong> this isn't about people who don't care — it's a data problem. Most people don't know where to act, what it will take, or whether it worked, and some officials benefit from keeping it that way.</p>
+    <p class="muted"><strong>What's actually going on:</strong> this mostly isn't a story about people trying to keep the public out — most civic leaders want more engagement and are stuck in the same broken loop. What they're missing isn't the will, it's the marketing budget and reach to get the word out.</p>
   </div>
 </div></section>
 
@@ -230,14 +246,30 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
   <div class="eyebrow" style="justify-content:center">Join Us</div>
   <h1>Build with the Civics &amp; Elections: "Full Circle" Pod</h1>
   <div class="body">
-    <p class="lede">We're forming a pod to close this loop — not study it forever. If this pulls at you, help us sharpen the frame and find the person with the power to act on it.</p>
-    <p><span class="btn">Join the Full Circle Pod</span></p>
-    <p class="tiny" style="margin-top:26px;text-transform:uppercase;letter-spacing:.14em;font-weight:700">What's next</p>
-    <div class="roadmap">
-      <div class="roadmap-step"><span class="dot"></span><span>Build the frame</span></div>
-      <div class="roadmap-step"><span class="dot"></span><span>Picture the future</span></div>
-      <div class="roadmap-step"><span class="dot"></span><span>Redesign the system</span></div>
-      <div class="roadmap-step"><span class="dot"></span><span>Launch and learn</span></div>
+    <p class="lede">We're forming a pod to close this loop through thoughtful, creative problem-solving. If this pulls at you, help us build the tools that empower our community to act and be heard.</p>
+    <p><a class="btn" href="https://theupskillinglabs.org/cycles/2/vote" target="_blank" rel="noopener noreferrer">Join the Full Circle Pod</a></p>
+    <p class="tiny" style="margin-top:22px;text-transform:uppercase;letter-spacing:.14em;font-weight:700">Where we are in the Upskilling Labs cycle</p>
+    <div class="timeline">
+      <div class="timeline-headers">
+        <div class="grp"><div class="lbl">Month 1</div><div class="ttl">Problem Discovery &amp; Definition</div></div>
+        <div class="grp"><div class="lbl">Month 2</div><div class="ttl">Exploration &amp; Experimentation</div></div>
+        <div class="grp"><div class="lbl">Month 3</div><div class="ttl">Prototype Building &amp; Iterating</div></div>
+      </div>
+      <div class="timeline-track">
+        <div class="timeline-node"><span class="label above"><span class="wk">Week 0</span><span class="name">Kickoff + Summit</span></span><span class="circle">0</span></div>
+        <div class="timeline-node active"><span class="circle">1</span><span class="label below"><span class="wk">Week 1</span><span class="name">Problem Proposals</span></span></div>
+        <div class="timeline-node"><span class="label above"><span class="wk">Week 2</span><span class="name">Problem Voting</span></span><span class="circle">2</span></div>
+        <div class="timeline-node"><span class="circle">3</span><span class="label below"><span class="wk">Week 3</span><span class="name">Pod Creation</span></span></div>
+        <div class="timeline-node"><span class="label above"><span class="wk">Week 4</span><span class="name">Meet The Pods</span></span><span class="circle">4</span></div>
+        <div class="timeline-node"><span class="circle">5</span><span class="label below"><span class="wk">Week 5</span><span class="name">Experiments</span></span></div>
+        <div class="timeline-node"><span class="label above"><span class="wk">Week 6</span><span class="name">Project Pitches</span></span><span class="circle">6</span></div>
+        <div class="timeline-node"><span class="circle">7</span><span class="label below"><span class="wk">Week 7</span><span class="name">Project Voting</span></span></div>
+        <div class="timeline-node"><span class="label above"><span class="wk">Week 8</span><span class="name">Meet The Projects</span></span><span class="circle">8</span></div>
+        <div class="timeline-node"><span class="circle">9</span><span class="label below"><span class="wk">Week 9</span><span class="name">Mentor Intensive</span></span></div>
+        <div class="timeline-node"><span class="label above"><span class="wk">Week 10</span><span class="name">Mentor Intensive</span></span><span class="circle">10</span></div>
+        <div class="timeline-node"><span class="circle">11</span><span class="label below"><span class="wk">Week 11</span><span class="name">Rehearsal</span></span></div>
+        <div class="timeline-node"><span class="label above"><span class="wk">Week 12</span><span class="name">Showcase + Summit</span></span><span class="circle">12</span></div>
+      </div>
     </div>
   </div>
 </div></section>
