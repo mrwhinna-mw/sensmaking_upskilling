@@ -1,14 +1,635 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Civics &amp; Elections: Signal Pool</title>
-<link rel="stylesheet" href="./assets/style.css">
-</head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Civics &amp; Elections: Signal Pool — Full Circle Pod</title>
+<meta name="description" content="Effort v. Impact — a Frame Creation problem map from The Upskilling Labs. Why civic engagement feels pointless, and what the evidence says.">
+<style>
+:root{
+  --paper:#f6f2e6; --ink:#152238; --ink2:#3d4a63; --accent:#c1932f; --accent-rgb:193,147,47;
+  --on-accent:#152238; --fog:#5c6577; --fog-dim:#8b93a3; --line:rgba(21,34,56,.14);
+  --card-bg:rgba(21,34,56,.035); --radius:4px; --head-font:Georgia,'Times New Roman',serif;
+  --accent-dim:rgba(var(--accent-rgb),.16);
+  --navy:#152238; --navy-soft:#1d2f4d;
+  --t3:#c1932f; --t2:#5b7fa6; --t1:#7a8a7f;
+  --maxw:1120px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:74px}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+section{padding:76px 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+h1,h2,h3,h4{font-family:var(--head-font);font-weight:700;letter-spacing:-.01em;line-height:1.15}
+h2{font-size:clamp(24px,3.4vw,36px);margin-bottom:12px}
+h3{font-size:17px;margin-bottom:6px}
+p{margin-bottom:14px}
+a{color:inherit}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:16px}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--accent);opacity:.7}
+.lede{font-size:clamp(16px,1.8vw,19px);color:var(--ink2);max-width:70ch}
+.muted{color:var(--fog);font-size:14.5px}
+.tiny{font-size:11.5px;color:var(--fog-dim);letter-spacing:.03em}
+.center{text-align:center}
+
+/* ---------- top nav ---------- */
+.topbar{position:sticky;top:0;z-index:60;background:rgba(246,242,230,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:60px}
+.tb-brand{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--fog-dim);white-space:nowrap}
+.tb-brand b{color:var(--ink)}
+.tb-links{display:flex;align-items:center;gap:22px}
+.tb-links a{font-size:12.5px;text-decoration:none;color:var(--fog);font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.tb-links a:hover{color:var(--accent)}
+.tb-links a.cta{background:var(--accent);color:var(--on-accent);padding:8px 16px;border-radius:999px;font-weight:700}
+@media(max-width:860px){.tb-links a:not(.cta){display:none}}
+
+/* ---------- hero ---------- */
+.hero{background:
+    radial-gradient(900px 520px at 12% -20%, rgba(var(--accent-rgb),.16), transparent 62%),
+    radial-gradient(700px 460px at 96% 120%, rgba(29,47,77,.10), transparent 58%),
+    var(--paper);
+  padding:92px 0 72px;border-top:none}
+.hero h1{font-size:clamp(38px,6.4vw,66px);margin-bottom:8px}
+.hero .sub{font-family:var(--head-font);font-size:clamp(17px,2.1vw,22px);color:var(--accent);font-style:italic;margin-bottom:22px}
+.hero .lede{font-size:clamp(16.5px,1.9vw,20px);color:var(--ink2);max-width:66ch}
+.hero-grid{display:grid;grid-template-columns:1.55fr .95fr;gap:48px;align-items:center}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:34px}}
+.btn{display:inline-block;border:1px solid var(--accent);color:var(--on-accent);background:var(--accent);
+  font-weight:700;font-size:13.5px;padding:12px 24px;border-radius:999px;text-decoration:none;transition:.2s}
+.btn:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--accent);background:var(--accent-dim)}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+
+/* pulsing signal mark */
+.signal{width:190px;height:190px;position:relative;margin:0 auto}
+.signal .ring{position:absolute;inset:0;border:1.5px solid var(--accent);border-radius:50%;opacity:0;animation:sp 3.4s ease-out infinite}
+.signal .ring:nth-child(2){animation-delay:1.13s}
+.signal .ring:nth-child(3){animation-delay:2.26s}
+.signal .core{position:absolute;inset:44%;background:var(--accent);border-radius:50%}
+@keyframes sp{0%{transform:scale(.3);opacity:.8}75%{opacity:0}100%{transform:scale(1.6);opacity:0}}
+@media(prefers-reduced-motion:reduce){.signal .ring{animation:none;opacity:.25}}
+
+/* ---------- stat strip ---------- */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:44px}
+.stat{background:var(--paper);padding:20px 16px;text-align:center}
+.stat b{display:block;font-family:var(--head-font);font-size:clamp(22px,3vw,32px);color:var(--accent);line-height:1}
+.stat span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--fog);margin-top:7px;font-weight:600}
+@media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- generic cards ---------- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:820px){.grid2,.grid3{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);background:var(--card-bg);border-radius:var(--radius);padding:22px 24px}
+.card.hi{background:linear-gradient(180deg,rgba(var(--accent-rgb),.10),transparent 78%)}
+.card .tag{display:inline-block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px}
+.card p{font-size:14px;color:var(--fog);margin:0}
+.card p+p{margin-top:9px}
+.icon{width:24px;height:24px;color:var(--accent);margin-bottom:12px;display:block}
+.icon-sm{width:16px;height:16px;color:var(--accent);flex:none}
+
+.callout{border-left:3px solid var(--accent);background:rgba(var(--accent-rgb),.07);padding:16px 20px;border-radius:0 var(--radius) var(--radius) 0;margin-top:18px}
+.callout p{margin:0;font-size:14.5px;color:var(--ink2)}
+.callout p+p{margin-top:10px}
+.callout strong{color:var(--ink)}
+
+/* ---------- explorer ---------- */
+.exp-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:22px 0 18px}
+.exp-search{flex:1;min-width:220px;position:relative}
+.exp-search input{width:100%;padding:11px 14px 11px 38px;border:1px solid var(--line);border-radius:999px;background:var(--paper);
+  font:inherit;font-size:14px;color:var(--ink);outline:none}
+.exp-search input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-dim)}
+.exp-search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--fog-dim)}
+.chip{border:1px solid var(--line);background:transparent;color:var(--fog);font:inherit;font-size:12.5px;font-weight:600;
+  padding:9px 15px;border-radius:999px;cursor:pointer;transition:.18s;white-space:nowrap}
+.chip:hover{border-color:var(--accent)}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#f6f2e6}
+.chip .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:middle}
+
+.ladder{display:flex;flex-direction:column;gap:10px}
+.node{border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);overflow:hidden}
+.node.t3{border-left:3px solid var(--t3)}
+.node.t2{border-left:3px solid var(--t2)}
+.node.t1{border-left:3px solid var(--t1)}
+.node-head{display:flex;align-items:flex-start;gap:13px;padding:15px 18px;cursor:pointer;background:transparent;border:none;
+  width:100%;text-align:left;font:inherit;color:inherit}
+.node-head:hover{background:rgba(21,34,56,.03)}
+.node-head .caret{flex:none;width:14px;height:14px;margin-top:4px;color:var(--fog-dim);transition:transform .2s}
+.node.open>.node-head .caret{transform:rotate(90deg)}
+.node-head .txt{flex:1;min-width:0}
+.node-tier{display:inline-block;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;margin-bottom:4px}
+.t3 .node-tier{color:var(--t3)} .t2 .node-tier{color:var(--t2)} .t1 .node-tier{color:var(--t1)}
+.node-title{font-family:var(--head-font);font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.3}
+.node-title.untitled{font-style:italic;color:var(--fog-dim);font-weight:400}
+.node-desc{font-size:13.3px;color:var(--fog);margin-top:5px;line-height:1.5}
+.node-meta{flex:none;font-size:10.5px;color:var(--fog-dim);letter-spacing:.05em;text-transform:uppercase;font-weight:600;margin-top:4px;white-space:nowrap}
+.node-body{display:none;padding:0 18px 16px 45px;border-top:1px solid var(--line);margin-top:-1px}
+.node.open>.node-body{display:block;padding-top:14px}
+.node-body .ladder{margin-top:0}
+
+.sig{display:flex;gap:11px;padding:10px 13px;border-left:1px solid var(--line);margin-bottom:7px;background:rgba(21,34,56,.02);border-radius:0 var(--radius) var(--radius) 0}
+.sig:last-child{margin-bottom:0}
+.sig .sdot{flex:none;width:6px;height:6px;border-radius:50%;background:var(--fog-dim);margin-top:7px}
+.sig .sname{font-size:13px;font-weight:700;color:var(--ink)}
+.sig .ssum{font-size:12.7px;color:var(--fog);line-height:1.5}
+.sig .stag{display:inline-block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--fog-dim);
+  border:1px solid var(--line);border-radius:3px;padding:1px 6px;margin-left:7px;vertical-align:middle;font-weight:700}
+.empty{padding:26px;text-align:center;color:var(--fog-dim);font-size:14px;border:1px dashed var(--line);border-radius:var(--radius)}
+
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11.5px;color:var(--fog);margin-bottom:6px}
+.legend span{display:flex;align-items:center;gap:7px}
+.legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+/* ---------- research columns ---------- */
+.col h4{display:flex;align-items:center;gap:8px;font-family:inherit;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:12px}
+.col ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.col li{font-size:13.2px;line-height:1.55;color:var(--fog);border-left:1px solid var(--line);padding-left:12px}
+.col li b{color:var(--ink);font-weight:600}
+.col li.q{font-style:italic;color:var(--ink2)}
+
+/* ---------- numbered assumptions ---------- */
+.numcard{display:flex;gap:16px;border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;background:var(--card-bg);margin-bottom:12px}
+.numcard .n{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700}
+.numcard p{font-size:14px;color:var(--ink2);margin:0}
+.numcard b{color:var(--ink)}
+
+/* ---------- timeline ---------- */
+.timeline{overflow-x:auto;padding-bottom:6px;margin-top:24px}
+.timeline-inner{min-width:900px}
+.timeline-headers{display:grid;grid-template-columns:repeat(13,1fr);margin-bottom:30px}
+.timeline-headers .grp{grid-column:span 4;padding-right:14px}
+.timeline-headers .grp:last-child{grid-column:span 5}
+.timeline-headers .grp+.grp{border-left:1px solid var(--line);padding-left:14px}
+.timeline-headers .lbl{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:3px}
+.timeline-headers .ttl{font-family:var(--head-font);font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.25}
+.timeline-track{display:grid;grid-template-columns:repeat(13,1fr);position:relative;padding:44px 0}
+.timeline-track::before{content:"";position:absolute;left:2%;right:2%;top:50%;height:1px;background:var(--line);transform:translateY(-50%)}
+.tl-node{display:flex;justify-content:center;position:relative}
+.tl-node .circle{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);color:var(--fog);
+  display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;position:relative;z-index:1}
+.tl-node.active .circle{width:34px;height:34px;background:var(--accent);border-color:var(--accent);color:var(--on-accent);
+  box-shadow:0 0 0 6px var(--accent-dim);font-size:12.5px}
+.tl-node .label{position:absolute;left:50%;transform:translateX(-50%);width:88px;text-align:center;font-size:10px;line-height:1.3}
+.tl-node .label.above{bottom:calc(100% + 9px)}
+.tl-node .label.below{top:calc(100% + 9px)}
+.tl-node .label .wk{display:block;font-weight:700;color:var(--fog-dim);letter-spacing:.05em;text-transform:uppercase;font-size:9px;margin-bottom:2px}
+.tl-node.active .label .wk{color:var(--accent)}
+.tl-node .label .name{display:block;font-weight:600;color:var(--fog)}
+.tl-node.active .label .name{color:var(--ink);font-weight:700}
+
+/* ---------- appendix / details ---------- */
+details.acc{border:1px solid var(--line);border-radius:var(--radius);background:var(--card-bg);margin-bottom:10px;overflow:hidden}
+details.acc>summary{cursor:pointer;padding:15px 20px;font-weight:700;font-size:14.5px;list-style:none;display:flex;
+  align-items:center;justify-content:space-between;gap:12px;font-family:var(--head-font)}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary::after{content:"+";font-size:19px;color:var(--accent);font-family:ui-sans-serif,system-ui;line-height:1}
+details.acc[open]>summary::after{content:"–"}
+details.acc>summary:hover{background:rgba(21,34,56,.03)}
+.acc-body{padding:4px 20px 20px;border-top:1px solid var(--line)}
+.acc-body p{font-size:14px;color:var(--fog)}
+.acc-body ol,.acc-body ul{margin:0 0 14px 20px;font-size:14px;color:var(--fog)}
+.acc-body li{margin-bottom:7px}
+.acc-body h4{font-size:14px;margin:16px 0 7px;color:var(--ink)}
+
+table.sig-table{width:100%;border-collapse:collapse;font-size:13px}
+table.sig-table th{text-align:left;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--fog-dim);
+  padding:9px 10px;border-bottom:1px solid var(--line);font-weight:700}
+table.sig-table td{padding:10px;border-bottom:1px solid var(--line);color:var(--fog);vertical-align:top}
+table.sig-table td.n{color:var(--ink);font-weight:600;width:30%}
+table.sig-table tr:last-child td{border-bottom:none}
+.tbl-scroll{max-height:460px;overflow-y:auto;border:1px solid var(--line);border-radius:var(--radius)}
+
+/* ---------- footer ---------- */
+.footer{background:var(--navy);color:#e8ecf3;padding:56px 0 40px;border-top:none}
+.footer h2{color:#fff}
+.footer .lede{color:#c3ccdb}
+.footer .tiny{color:#8695ad}
+.footer a{color:var(--accent)}
+.footer .btn{border-color:var(--accent)}
+.footer-bottom{margin-top:34px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);display:flex;
+  justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:11.5px;color:#8695ad}
+.star{position:absolute;right:-30px;top:-40px;width:230px;height:230px;color:var(--accent);opacity:.07;pointer-events:none}
+.footer .wrap{position:relative;overflow:hidden}
+</style></head>
 <body>
-<main id="report"><p class="loading">Loading…</p></main>
-<script src="./data/site-data.js"></script>
-<script src="./assets/viewer.js"></script>
-</body>
-</html>
+
+<div class="topbar"><div class="wrap">
+  <div class="tb-brand">The <b>Upskilling Labs</b> · Signal Pool</div>
+  <nav class="tb-links">
+    <a href="#problem">The problem</a>
+    <a href="#themes">Themes</a>
+    <a href="#explorer">Evidence</a>
+    <a href="#research">Research</a>
+    <a href="#next">What's next</a>
+    <a href="./slides.html" class="cta">View the pitch →</a>
+  </nav>
+</div></div>
+
+<!-- ================= HERO ================= -->
+<section class="hero"><div class="wrap">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">Civics &amp; Elections · Full Circle Pod</div>
+      <h1>Effort v. Impact</h1>
+      <div class="sub">Why showing up stopped feeling worth it</div>
+      <p class="lede">Some people would engage — if they believed a given civic action was worth the effort. The barriers are too high and the incentives are too low: it takes real effort just to find out what's available and whether it matters — and when the feedback loop is broken, people stop trying because they never see the result of their effort.</p>
+      <p class="lede" style="font-weight:600;color:var(--ink)">If I go to a protest, what actually happens?</p>
+      <div class="btn-row">
+        <a class="btn" href="https://theupskillinglabs.org/cycles/2/vote" target="_blank" rel="noopener">Join the Full Circle Pod</a>
+        <a class="btn ghost" href="#explorer">Explore the evidence</a>
+      </div>
+    </div>
+    <div class="signal" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="ring"></span><span class="core"></span></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>55</b><span>Signals gathered</span></div>
+    <div class="stat"><b>27</b><span>Evidence cards</span></div>
+    <div class="stat"><b>9</b><span>Patterns</span></div>
+    <div class="stat"><b>2</b><span>Named themes</span></div>
+    <div class="stat"><b>54</b><span>Connections made</span></div>
+  </div>
+  <p class="tiny" style="margin-top:12px">A Frame Creation problem map (Kees Dorst's method). Raw field observations were triangulated into evidence, evidence into patterns, patterns into themes.</p>
+</div></section>
+
+<!-- ================= PROBLEM ================= -->
+<section id="problem"><div class="wrap">
+  <div class="eyebrow">The Paradox</div>
+  <h2>Why This Stays Stuck</h2>
+  <p class="lede">Two forces work together to keep people out — and each one makes the other worse.</p>
+
+  <div class="grid2" style="margin-top:26px">
+    <div class="card hi">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M5 8h14M5 8l-3 6a3 3 0 006 0l-3-6zM19 8l-3 6a3 3 0 006 0l-3-6zM8 21h8M12 6v15"/></svg>
+      <span class="tag">Force 1</span>
+      <h3>It's rational to opt out</h3>
+      <p>When it takes real work to find out what to do — and there's no way to tell if it worked — stepping back is the sensible choice. That's not laziness. It's people making a reasonable call with limited time and no information.</p>
+    </div>
+    <div class="card hi">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/></svg>
+      <span class="tag">Force 2</span>
+      <h3>It only works if we all show up</h3>
+      <p>Civic engagement pays off when enough people take part — one vote or one comment rarely moves anything on its own. So everyone waits for someone else to go first, and nothing moves.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>Why it sticks around:</strong> this isn't about people who don't care — it's a data problem. Most people don't know where to act, what it will take, or whether it worked, and some officials benefit from keeping it that way.</p>
+    <p><strong>What's actually going on:</strong> this mostly isn't a story about people trying to keep the public out — most civic leaders want more engagement and are stuck in the same broken loop. What they're missing isn't the will, it's the marketing budget and reach to get the word out.</p>
+  </div>
+</div></section>
+
+<!-- ================= THEMES ================= -->
+<section id="themes"><div class="wrap">
+  <div class="eyebrow">What We Found</div>
+  <h2>The Themes Beneath It</h2>
+  <p class="lede">Everything in the evidence map below points at two missing pieces of information.</p>
+  <div class="grid2" style="margin-top:26px">
+    <div class="card">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L20 20"/></svg>
+      <span class="tag">Theme</span><h3>What's available</h3>
+      <p>People need to know what civic actions exist and what each one would actually be trying to change. At the local level, that information mostly doesn't exist — so there's nothing to weigh the effort against.</p>
+    </div>
+    <div class="card">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+      <span class="tag">Theme</span><h3>Whether it worked</h3>
+      <p>Even when someone acts, there's no feedback loop telling them whether it changed anything. Without that signal, there's no way to judge the action worth repeating — or worth trying at all.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ================= EXPLORER ================= -->
+<section id="explorer"><div class="wrap">
+  <div class="eyebrow">The Evidence</div>
+  <h2>Our Section of the Signal Pool</h2>
+  <p class="lede">Every claim below is built from the ground up: raw signals from the field were triangulated into evidence, evidence grouped into patterns, and patterns lifted into themes. Click any row to open its trail.</p>
+
+  <div class="exp-toolbar">
+    <div class="exp-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>
+      <input id="q" type="search" placeholder="Search signals, evidence, patterns, themes…" autocomplete="off">
+    </div>
+    <button class="chip on" data-f="all">All</button>
+    <button class="chip" data-f="3"><span class="dot" style="background:var(--t3)"></span>Themes</button>
+    <button class="chip" data-f="2"><span class="dot" style="background:var(--t2)"></span>Patterns</button>
+    <button class="chip" data-f="1"><span class="dot" style="background:var(--t1)"></span>Evidence</button>
+    <button class="chip" id="expandAll">Expand all</button>
+  </div>
+
+  <div class="legend">
+    <span><i style="background:var(--t3)"></i> Theme — the highest-level claim</span>
+    <span><i style="background:var(--t2)"></i> Pattern — repeated behaviour across cases</span>
+    <span><i style="background:var(--t1)"></i> Evidence — two or more signals triangulating</span>
+    <span><i style="background:var(--fog-dim)"></i> Signal — a single raw field observation</span>
+  </div>
+
+  <div id="ladder" class="ladder" style="margin-top:16px"></div>
+  <p class="tiny" id="count" style="margin-top:14px"></p>
+</div></section>
+
+<!-- ================= RESEARCH ================= -->
+<section id="research"><div class="wrap">
+  <div class="eyebrow">How We Know</div>
+  <h2>The Research Backs This Up</h2>
+  <p class="lede">This isn't just our read of the room — three separate bodies of research point the same direction.</p>
+  <div class="grid3" style="margin-top:26px">
+    <div class="col"><h4><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10M20 21V10M12 3l9 5H3l9-5zM8 21v-7M12 21v-7M16 21v-7"/></svg>Political science</h4><ul>
+      <li><b>Communities solve shared problems on their own</b> — but only when people can see the rules, the effort involved, and whether it's working. (Elinor Ostrom, Nobel Prize–winning research on collective action)</li>
+      <li>When people believe the usual channels won't respond, they don't disappear — they redirect into protests, boycotts, and action outside the system. The impulse to act doesn't go away; it just moves.</li>
+    </ul></div>
+    <div class="col"><h4><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4V5z"/></svg>Public opinion</h4><ul>
+      <li><b>Pew:</b> trust in government sits near a 70-year low, with a sharp partisan split — this is the dominant public mood, not a fringe complaint.</li>
+      <li><b>Pew (2026):</b> the most civically active people are also among the most anxious about whether any of it matters — engagement and doubt travel together, not apart.</li>
+    </ul></div>
+    <div class="col"><h4><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.5 7-12a7 7 0 10-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg>Case studies</h4><ul>
+      <li><b>vTaiwan</b> invites citizens, experts, and officials to work through a specific issue online, surfaces the ideas that get broad agreement, and commits the government to act on it — turning public consensus into real national policy, including new ride-sharing rules that ended a years-long standoff with taxi drivers.</li>
+      <li><b>Porto Alegre, Brazil</b> lets residents vote directly on city spending — and those votes become real line items in the budget, not a suggestion box nobody reads.</li>
+    </ul></div>
+  </div>
+
+  <h3 style="margin-top:44px;font-size:19px">Voices we still need</h3>
+  <p class="muted" style="margin-bottom:20px">The open questions in each area before we commit to a frame.</p>
+  <div class="grid3">
+    <div class="col"><h4>Political science</h4><ul>
+      <li class="q">Are people disengaging because they've lost trust, or because they don't have enough information to act?</li>
+      <li class="q">Does low trust drive people to disengage, or does disengaging drive the low trust — which comes first?</li>
+      <li class="q">Does this pattern hold outside the U.S., or is it shaped by how our specific system works (district lines, election rules)?</li>
+      <li class="q">If the payoff became clearer, would more people get involved — or would they just redirect their energy elsewhere?</li>
+    </ul></div>
+    <div class="col"><h4>Public opinion</h4><ul>
+      <li class="q">Do people distrust government because they can't see their impact, or because they've lost on the merits and know it?</li>
+      <li class="q">Is the "engaged but anxious" group anxious about this specific problem, or for unrelated reasons?</li>
+      <li class="q">Would showing people an honest account of their impact bring more people in, or discourage them?</li>
+      <li class="q">Does distrust hold at the local level too, where the feedback loop is naturally faster?</li>
+    </ul></div>
+    <div class="col"><h4>Case studies</h4><ul>
+      <li class="q">vTaiwan works well on contained, technical issues — would the same approach hold up on bigger, more divisive fights?</li>
+      <li class="q">Does Porto Alegre-style budgeting work anywhere, or was its success tied to one specific political moment?</li>
+      <li class="q">When communities like this succeed, does the benefit last — or fade once the initial excitement wears off?</li>
+      <li class="q">Has making impact visible ever backfired — made people more discouraged once they could see clearly they hadn't won?</li>
+    </ul></div>
+  </div>
+</div></section>
+
+<!-- ================= ASSUMPTIONS ================= -->
+<section id="assumptions"><div class="wrap">
+  <div class="eyebrow">Open Questions</div>
+  <h2>The Assumptions Behind This Pitch</h2>
+  <p class="lede" style="margin-bottom:26px">We built this case on real evidence — but also on a few bets we haven't proven yet.</p>
+  <div class="numcard"><span class="n">1</span><p><b>There's a real audience:</b> we're assuming there are people who'd get involved if they simply knew how — not people who've already decided they don't care.</p></div>
+  <div class="numcard"><span class="n">2</span><p><b>Engagement is worth encouraging:</b> we're assuming civic engagement is genuinely good — that more participation leads to better outcomes, not just more noise.</p></div>
+  <div class="numcard"><span class="n">3</span><p><b>Visible results won't backfire:</b> we're assuming clear feedback on impact helps people build the habit of showing up. It might instead teach people to only act when a payoff is guaranteed — and tune out everything else.</p></div>
+</div></section>
+
+<!-- ================= APPENDIX ================= -->
+<section id="appendix"><div class="wrap">
+  <div class="eyebrow">The Full Record</div>
+  <h2>Method &amp; Appendix</h2>
+  <p class="lede" style="margin-bottom:26px">Nothing here is hidden — it's just tucked away so the main story stays readable. Open any section for the underlying detail.</p>
+
+  <details class="acc"><summary>All 55 signals — the raw field observations</summary>
+    <div class="acc-body">
+      <p>Every claim on this site traces back to one of these. Signals are unedited observations gathered from the field.</p>
+      <div class="tbl-scroll"><table class="sig-table"><thead><tr><th>Signal</th><th>What was observed</th><th>Type</th></tr></thead><tbody id="sigTable"></tbody></table></div>
+    </div>
+  </details>
+
+  <details class="acc"><summary id="unSum">Signals not yet triangulated — raw material still on the table</summary>
+    <div class="acc-body">
+      <p>These observations are in the pool but haven't yet been paired with a second source to become evidence. They're live leads, not discards — several point at threads we haven't pulled on.</p>
+      <div class="tbl-scroll"><table class="sig-table"><thead><tr><th>Signal</th><th>What was observed</th></tr></thead><tbody id="unTable"></tbody></table></div>
+    </div>
+  </details>
+
+  <details class="acc"><summary>How to read a Frame Creation map</summary>
+    <div class="acc-body">
+      <p>This is a problem situation mapped using <strong>Kees Dorst's Frame Creation method</strong> (from <em>Frame Innovation</em>, MIT Press). The evidence trail runs from raw observations up to the situation itself:</p>
+      <ol>
+        <li><strong>Signals</strong> — raw field observations, unedited.</li>
+        <li><strong>Evidence</strong> — two or more signals triangulating on one claim.</li>
+        <li><strong>Patterns</strong> — repeated behaviour visible across several pieces of evidence.</li>
+        <li><strong>Themes</strong> — what the patterns jointly reveal about the underlying condition.</li>
+        <li><strong>Problem situation</strong> — the open, complex, networked condition a new frame comes from.</li>
+      </ol>
+      <p>The job at this stage is to <em>investigate the field, not to solve anything</em>. Solutions come later, and only after the field is mapped and the archaeology is deep.</p>
+      <h4>Why this problem is "open," not "bounded"</h4>
+      <p>A bounded problem has a known solution path. This one doesn't — it's complex (several competing explanations), networked (no actor moves alone), and dynamic (measuring responsiveness changes the behaviour of everyone being measured). Every promising case study we found relocated the tension rather than eliminating it.</p>
+    </div>
+  </details>
+
+  <details class="acc"><summary>What comes next in the method</summary>
+    <div class="acc-body">
+      <p>This situation is mapped but not solved — and solving it is not the next step. The next steps in Frame Creation are:</p>
+      <ol>
+        <li><strong>Map the field</strong> — identify every player connected to this situation or a future resolution. Define each by their practices and currency, not their title. Look especially for players who share the values our themes surfaced — even in distant, unexpected domains.</li>
+        <li><strong>Identify a client</strong> — from the potential problem owners, who could own this situation or adopt a resolution? What would they need to see?</li>
+        <li><strong>Choose a delivery context</strong> — through what kind of vehicle does a resolution reach the field? (An internal team, a government program, an open-source project, a startup, a nonprofit, a civic institution, a co-op — there is no right answer, only trade-offs.)</li>
+        <li><strong>Deepen the archaeology</strong> — the gaps above name what's still thin. Go find it: interview people, run deep-research sweeps, pull secondary sources.</li>
+        <li><strong>Create frames</strong> — only after the field is mapped and the archaeology is deep. "If this situation is approached as if it is ___, then ___."</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="acc"><summary>Honest limits of this map</summary>
+    <div class="acc-body">
+      <p>Where the evidence is thin, and we know it:</p>
+      <ul>
+        <li><strong>Card coverage is uneven.</strong> Two themes are fully built out; several patterns and evidence cards sit unattached, waiting for more signals before they climb the ladder.</li>
+        <li><strong>Some cards are still untitled.</strong> They hold real signals but haven't yet had their claim named — they're shown here rather than deleted.</li>
+        <li><strong>Most signals are U.S.-based.</strong> We can't yet say whether this pattern is inherent to mass democracy or an artifact of specific U.S. institutional design.</li>
+        <li><strong>Single sources dressed as triangulation.</strong> A few evidence cards lean on two signals from a similar vantage point. Read those critically.</li>
+        <li><strong>No decision-maker voice yet.</strong> We've heard from residents and observers, but not enough from the legislative staff and local officials who sit on the other side of the loop.</li>
+      </ul>
+    </div>
+  </details>
+</div></section>
+
+<!-- ================= NEXT / JOIN ================= -->
+<section id="next" class="footer"><div class="wrap">
+  <svg class="star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg>
+  <div class="eyebrow">Join Us</div>
+  <h2>Build with the Civics &amp; Elections: "Full Circle" Pod</h2>
+  <p class="lede" style="max-width:64ch">We're forming a pod to close this loop through thoughtful, creative problem-solving. If this pulls at you, help us build the tools that empower our community to act and be heard.</p>
+  <div class="btn-row">
+    <a class="btn" href="https://theupskillinglabs.org/cycles/2/vote" target="_blank" rel="noopener">Join the Full Circle Pod</a>
+    <a class="btn ghost" href="./slides.html" style="color:#e8ecf3;border-color:rgba(255,255,255,.25)">View the pitch deck</a>
+  </div>
+
+  <p class="tiny" style="margin-top:38px;text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:#c3ccdb">Where we are in the Upskilling Labs cycle</p>
+  <div class="timeline"><div class="timeline-inner">
+    <div class="timeline-headers">
+      <div class="grp"><div class="lbl">Month 1</div><div class="ttl" style="color:#fff">Problem Discovery &amp; Definition</div></div>
+      <div class="grp"><div class="lbl">Month 2</div><div class="ttl" style="color:#fff">Exploration &amp; Experimentation</div></div>
+      <div class="grp"><div class="lbl">Month 3</div><div class="ttl" style="color:#fff">Prototype Building &amp; Iterating</div></div>
+    </div>
+    <div class="timeline-track" id="tlTrack"></div>
+  </div></div>
+
+  <div class="footer-bottom">
+    <span>Civics &amp; Elections: Signal Pool · The Upskilling Labs</span>
+    <span>Mapped with Frame Creation (Kees Dorst) · 55 signals · 38 cards</span>
+  </div>
+</div></section>
+
+<script>
+const DATA = {"cards":[{"id":"card_9e883808-8899-43e8-8533-f62033a56f2d","title":"","desc":"","tier":1,"tierName":"Evidence","children":["item_29","item_13"],"orphan":true},{"id":"card_2ff004be-8293-4a87-947b-2ce4562bbac1","title":"Exhaustion of Cross-Ideological Tolerance","desc":"Local stakeholders disengage from ideological opponents because active listening has vanished from public forums, rendering current participation tools largely ineffective.","tier":1,"tierName":"Evidence","children":["item_26","item_31"],"orphan":false},{"id":"card_e115d2b4-9106-44e4-b2a9-13b7686cb9d5","title":"","desc":"","tier":1,"tierName":"Evidence","children":["item_15","item_31"],"orphan":true},{"id":"card_d0ee16cd-ed1c-4c93-a0d0-a81f0f114b9f","title":"Digital Channels Alienating Polarized Constituents","desc":"Differing political groups encounter AI-generated interference whenever they attempt online dialogue, driving them away from shared digital spaces. Consequently, new civic engagement tools only exacerbate isolation rather than bridging differences.","tier":1,"tierName":"Evidence","children":["item_15","item_31"],"orphan":false},{"id":"card_dc734b4d-8db7-416e-9121-9ba49bd3d989","title":"Algorithmic Disruption Accelerating Stakeholder Exhaustion","desc":"Polarized constituents attempting cross-ideological dialogue face automated channel flooding alongside social hostility, driving them to abandon shared civic spaces entirely.","tier":2,"tierName":"Pattern","children":["card_2ff004be-8293-4a87-947b-2ce4562bbac1","card_d0ee16cd-ed1c-4c93-a0d0-a81f0f114b9f","card_55a9290b-0ccf-4170-bc78-55ce9b5c3c5f"],"orphan":false},{"id":"card_55a9290b-0ccf-4170-bc78-55ce9b5c3c5f","title":"Passive Awareness Meets Active Polarization","desc":"Disengaged voters rely on passive, opportunistic information channels to learn about local elections while experiencing a civic culture that no longer tolerates ideological disagreement. As a result, alienation deepens into a total retreat from local democratic participation.","tier":1,"tierName":"Evidence","children":["item_16","item_26"],"orphan":false},{"id":"card_48ac0422-747e-450c-ac9c-7c61b5007a00","title":"Structural Partisanship Distorts Electoral Legitimacy","desc":"Structural features like gerrymandering and voting rules reinforce partisan boundaries, causing voters to view routine out-of-jurisdiction election procedures through a lens of partisan threat.","tier":1,"tierName":"Evidence","children":["item_33","item_28"],"orphan":false},{"id":"card_772bd853-8b69-42f2-b487-be7915a80117","title":"Information Friction in Civic Power","desc":"Voters and stretched legislative staff operate without a shared baseline of who holds power and how fast it moves, causing civic outreach tools to fail at bridging the gap.","tier":1,"tierName":"Evidence","children":["item_30","item_27"],"orphan":false},{"id":"card_a168d595-bfad-40f1-9abb-1b65539b7c92","title":"High-Risk, Low-Information Civic Spaces","desc":"Citizens and potential leaders experience local politics as an opaque, media-dominated environment, driving voter apathy and self-selection out of public leadership.","tier":1,"tierName":"Evidence","children":["item_06","item_38"],"orphan":false},{"id":"card_4f8e239a-3235-42f3-bccf-78df947d901a","title":"High-Risk, Low-Visibility Civic Engagement","desc":"Community members and leaders who attempt to communicate or participate in public spaces face intense personal exposure with little transparency into how decisions or power actually operate. Because the risk of participation is high while structural clarity remains low, people self-censor, avoid public office, and disengage from dialogue.","tier":2,"tierName":"Pattern","children":["card_a168d595-bfad-40f1-9abb-1b65539b7c92","card_772bd853-8b69-42f2-b487-be7915a80117"],"orphan":false},{"id":"card_d21df978-227c-4f7a-a017-7271f1d6c34f","title":"Fragmented Channels Fracture Shared Realities","desc":"Election officials attempt to communicate across isolated media ecosystems, leaving different social groups to operate on mutually exclusive facts about distant jurisdictions.","tier":1,"tierName":"Evidence","children":["item_28","item_86c16dd7-803d-4de3-bb83-16ac8ccb93a3"],"orphan":false},{"id":"card_dd102d6a-2751-433b-a2be-63d559284342","title":"Out-of-Jurisdiction Opacity Breeds Assumption of Bad Faith","desc":"Because voters only see local election processes firsthand, the unfamiliar rules of distant jurisdictions appear mysterious—leading people to fill those information voids with suspicions of partisan cheating.","tier":2,"tierName":"Pattern","children":["card_d21df978-227c-4f7a-a017-7271f1d6c34f","card_48ac0422-747e-450c-ac9c-7c61b5007a00"],"orphan":false},{"id":"card_e3fc7d36-c255-4121-8d3d-272513669640","title":"The Illusion of Civic Agency","desc":"Communities engage with public agencies expecting shared decision-making, only to find that institutional outputs remain insulated from their collective sentiment by legal and political barriers.","tier":1,"tierName":"Evidence","children":["item_09","item_14"],"orphan":false},{"id":"card_ff76f358-8e85-47fc-9930-62569095b2db","title":"","desc":"","tier":1,"tierName":"Evidence","children":["item_24","item_ac4140f1-032a-4ed8-974d-e7a74c5dd4fe"],"orphan":true},{"id":"card_b588c655-88c6-4921-83d7-87122ab43698","title":"Private Isolation from Collapsed Civic Scaffolding","desc":"Local residents struggle to form community ties because historic relational structures have vanished, forcing individuals to shoulder what was once a shared civic responsibility.","tier":1,"tierName":"Evidence","children":["item_ac4140f1-032a-4ed8-974d-e7a74c5dd4fe","item_24"],"orphan":false},{"id":"card_22c29d8d-32d9-4ae4-80c4-03f07f0d27b5","title":"Lack of local small organization engagement","desc":"Overwhelmed board members default to legacy paper and spreadsheet routines, accidentally locking out broader member participation through administrative friction","tier":1,"tierName":"Evidence","children":["item_25","item_ac4140f1-032a-4ed8-974d-e7a74c5dd4fe"],"orphan":false},{"id":"card_4160a068-8c0b-4414-9633-eb9b0dd3dba9","title":"disconect of people at local level","desc":"","tier":2,"tierName":"Pattern","children":["card_22c29d8d-32d9-4ae4-80c4-03f07f0d27b5","card_b588c655-88c6-4921-83d7-87122ab43698"],"orphan":true},{"id":"card_64dbc21b-9797-4f05-9200-0f41afb68003","title":"Structural Opacity Converts Distance Into Threat","desc":"When citizens cannot see how decisions, timelines, or out-of-jurisdiction elections actually operate, they fill the structural void with assumptions of malice, while those facing public exposure self-censor to protect themselves. This transforms routine civic friction into an unmanageable personal risk and widespread institutional distrust.","tier":3,"tierName":"Theme","children":["card_4f8e239a-3235-42f3-bccf-78df947d901a","card_dd102d6a-2751-433b-a2be-63d559284342"],"orphan":true},{"id":"card_e8abcc80-94ad-4269-b4f7-bbe17ddd6bd3","title":"Algorithms and clickbait expanding distrust","desc":"","tier":3,"tierName":"Theme","children":["card_dc734b4d-8db7-416e-9121-9ba49bd3d989","card_dd102d6a-2751-433b-a2be-63d559284342"],"orphan":true},{"id":"card_59f29353-ee7b-4f7a-b135-aecf4b47e8a4","title":"Distrust and Disinformation with social media","desc":"","tier":1,"tierName":"Evidence","children":["item_10","item_15"],"orphan":true},{"id":"card_e82b7747-33b6-456c-b5e9-43de573fd1fc","title":"Accountability","desc":"","tier":1,"tierName":"Evidence","children":["item_46","item_43"],"orphan":true},{"id":"card_b273d6d5-6790-497d-bffc-d4eb9230f47c","title":"finding localized community engagement opportunities","desc":"","tier":1,"tierName":"Evidence","children":["item_48","item_ac4140f1-032a-4ed8-974d-e7a74c5dd4fe"],"orphan":true},{"id":"card_57395264-69ec-4865-a9cb-f2fe29c434dd","title":"Unclear election rules","desc":"The impacts of election processes are opaque for citizens.","tier":1,"tierName":"Evidence","children":["item_22","item_04","item_39"],"orphan":false},{"id":"card_39db5838-c166-4308-af79-f9c9f1724361","title":"Equity of representation","desc":"System designers and incumbent gatekeepers operate rules that freeze demographic power balances before ballots are cast. As a result, non-dominant groups waste agency trying to win within a rigged spatial and institutional architecture.","tier":1,"tierName":"Evidence","children":["item_558a3c99-862d-45c1-b33a-e95fcef51102","item_40"],"orphan":false},{"id":"card_1732d47d-6e13-4cae-a883-2e60395c40e2","title":"Misinformation across groups","desc":"","tier":1,"tierName":"Evidence","children":["item_02","item_86c16dd7-803d-4de3-bb83-16ac8ccb93a3"],"orphan":true},{"id":"card_5550f526-868b-4726-ab72-2f18e7798249","title":"Campaign finance and overrepresented voices","desc":"Everyday voters lose meaningful representation because concentrated spending and boundary manipulation neutralize competitive elections before ballots are cast.","tier":1,"tierName":"Evidence","children":["item_09","item_03"],"orphan":false},{"id":"card_f2bcd866-e50c-4cae-9ff9-85cf4001a7c1","title":"Unclear voting processes","desc":"Challenge of educating voters quickly and efficiently on voting and electoral issues","tier":1,"tierName":"Evidence","children":["item_11","item_22"],"orphan":false},{"id":"card_3082d8cd-7de3-438e-b4e7-94437b9632e9","title":"Genuine dialogue eaten by clickbait","desc":"Civic institutions attempt to reach community members through open communication channels, but automated spam and competing entertainment options exhaust citizen attention and obscure genuine dialogue.","tier":1,"tierName":"Evidence","children":["item_37","item_15"],"orphan":true},{"id":"card_a41c5011-9bf3-4622-829a-e4a4f86766d0","title":"Ranked voting challenges","desc":"Voters face complex new choice architectures while election bodies and civic media fail to deliver clear, accessible candidate information. As a result, voters experience decision paralysis or default to low-information voting, blunting the intended systemic benefits of reform.","tier":1,"tierName":"Evidence","children":["item_34","item_04"],"orphan":false},{"id":"card_fb0e04c2-46f6-40f2-be26-b648f7f43184","title":"Gerrymandering","desc":"","tier":1,"tierName":"Evidence","children":["item_17","item_33"],"orphan":true},{"id":"card_878fada5-7858-47c0-a158-c89284601669","title":"Participation apathy","desc":"Voters recognize that traditional turnout mechanisms yield negligible structural change, resulting in deliberate, rational non-participation.","tier":1,"tierName":"Evidence","children":["item_35","item_5736cc04-fae6-40f2-93f5-6ecd32be8bd3"],"orphan":false},{"id":"card_00c38b08-06f9-4534-a43e-204b95f77f3b","title":"Local coordination of resources","desc":"Government agencies and service providers isolate their funding and authority, leaving unpaid local leaders and constituents to manually bridge the gap between existing resources and community awareness.","tier":1,"tierName":"Evidence","children":["item_47","item_44"],"orphan":false},{"id":"card_b17adcaf-7de5-477d-9b18-d7c37febe8ee","title":"Local constituent services operational challenges","desc":"High-barrier navigation processes and templated political communications wall off available public resources from the constituents who need them most.","tier":1,"tierName":"Evidence","children":["item_47","item_36"],"orphan":false},{"id":"card_5e9d8b92-8c8b-458a-8ec1-5f0151378cd7","title":"Local level Resource Coordination communication challenges`","desc":"","tier":2,"tierName":"Pattern","children":["card_b17adcaf-7de5-477d-9b18-d7c37febe8ee","card_00c38b08-06f9-4534-a43e-204b95f77f3b"],"orphan":true},{"id":"card_5e48b6db-6b12-4952-8a62-44304be9bd29","title":"Civic Mandates Without Functional Literacy","desc":"The state demands active civic participation through voting while systematically failing to provide the basic structural education required to make informed choices. This disconnect shifts the burden of interpretation entirely onto individual citizens, turning the ballot box into an exercise in guesswork.","tier":2,"tierName":"Pattern","children":["card_f2bcd866-e50c-4cae-9ff9-85cf4001a7c1","card_57395264-69ec-4865-a9cb-f2fe29c434dd"],"orphan":true},{"id":"card_6d7ccc61-6b68-435e-908a-a0d1a4a227ff","title":"Procedural Reform Disconnected From Voter Literacy","desc":"Institutional changes to how people vote outpace public education regarding what offices do and how new voting rules operate. Consequently, the intended systemic benefits of election reforms are blunted because voters cannot reliably connect their intent to the mechanism on the page.","tier":2,"tierName":"Pattern","children":["card_57395264-69ec-4865-a9cb-f2fe29c434dd","card_a41c5011-9bf3-4622-829a-e4a4f86766d0"],"orphan":true},{"id":"card_4bc3cfae-dd07-4fc8-955e-6b8490b6269f","title":"1. Rational Withdrawal From Rigged Architecture","desc":"Non-dominant voters recognize that institutional gatekeepers use fixed structural rules to pre-determine power balances, turning deliberate non-participation into a logical response to invisible glass ceilings.","tier":2,"tierName":"Pattern","children":["card_39db5838-c166-4308-af79-f9c9f1724361","card_878fada5-7858-47c0-a158-c89284601669"],"orphan":true},{"id":"card_0799bb67-6159-4d7a-8e3d-a602b57e1e9e","title":"Pre-Empted Democratic Outcomes","desc":"Structural barriers like gerrymandered boundaries and legal precedents neutralize citizen input long before votes or public comments are registered.","tier":2,"tierName":"Pattern","children":["card_e3fc7d36-c255-4121-8d3d-272513669640","card_5550f526-868b-4726-ab72-2f18e7798249"],"orphan":true}],"signals":[{"id":"item_891642f2-4cfb-41d2-bd6b-4d598b7e0d92","tag":"Source Extract","title":"Misinformation","summary":"via media","url":"","verified":true},{"id":"item_86c16dd7-803d-4de3-bb83-16ac8ccb93a3","tag":"Source Extract","title":"Truths / Facts","summary":"are not shared across groups","url":"","verified":true},{"id":"item_c3ffe555-dd7f-4e7c-aa25-59dbf548eea3","tag":"Source Extract","title":"Access to information","summary":"about local candidate records is not easy to find (self-reported)","url":"","verified":true},{"id":"item_ac4140f1-032a-4ed8-974d-e7a74c5dd4fe","tag":"Source Extract","title":"Finding hyper-local","summary":"community engagement is hard","url":"","verified":true},{"id":"item_21840627-7901-4d3c-a896-c645111c3279","tag":"Source Extract","title":"Organizing individual volunteers","summary":"is a labor intensive process w/ lots of attrition","url":"","verified":true},{"id":"item_558a3c99-862d-45c1-b33a-e95fcef51102","tag":"Source Extract","title":"Equality of representation","summary":"gerrymandering voters are not equally represented","url":"","verified":true},{"id":"item_5736cc04-fae6-40f2-93f5-6ecd32be8bd3","tag":"Source Extract","title":"Participation apathy","summary":"voter turnout is low","url":"","verified":true},{"id":"item_01","tag":"Source Extract","title":"Restructuring the Political System","summary":"A high-level desire to shift the fundamental political structure of the United States to model other international systems.","url":"https://theupskillinglabs.org/survey/civics/results#r-1","verified":false},{"id":"item_02","tag":"Source Extract","title":"Media Misinformation","summary":"Broad concerns regarding how misleading media and digital influencing are negatively impacting civic engagement.","url":"https://theupskillinglabs.org/survey/civics/results#r-3","verified":false},{"id":"item_03","tag":"Source Extract","title":"Campaign Finance & District Competitiveness","summary":"Observations that financial influence and gerrymandering have reduced the competitiveness of congressional districts.","url":"https://theupskillinglabs.org/survey/civics/results#r-4","verified":false},{"id":"item_04","tag":"Source Extract","title":"Ranked Choice Voting Education","summary":"The implementation of ranked choice voting lacks sufficient public education to help voters understand its systemic benefits and how it changes voting behaviors.","url":"https://theupskillinglabs.org/survey/civics/results#r-5","verified":false},{"id":"item_05","tag":"Source Extract","title":"Targeting Legislative Influence","summary":"It is currently too labor-intensive and expensive to identify the most effective individuals or groups to lobby specific legislators on specific issues at the right time.","url":"https://theupskillinglabs.org/survey/civics/results#r-6","verified":false},{"id":"item_06","tag":"Source Extract","title":"Local Candidate Information Gaps","summary":"Voters lack easily accessible, actionable information about local county-level candidates, often relying heavily on name recognition from campaign signs.","url":"https://theupskillinglabs.org/survey/civics/results#r-7","verified":false},{"id":"item_07","tag":"Source Extract","title":"Public Engagement on Government AI","summary":"Citizens lack the tools and platforms to provide feedback on or inform how government agencies and companies deploy artificial intelligence in their communities.","url":"https://theupskillinglabs.org/survey/civics/results#r-8","verified":false},{"id":"item_08","tag":"Source Extract","title":"Recycling Contamination & Civic Decay","summary":"Improper recycling in public spaces leads to systemic waste and creates a visible, self-perpetuating belief that responsible civic behavior doesn't matter.","url":"https://theupskillinglabs.org/survey/civics/results#r-9","verified":false},{"id":"item_09","tag":"Source Extract","title":"Campaign Finance","summary":"Reform efforts consistently hit roadblocks like the Citizens United decision.","url":"https://theupskillinglabs.org/survey/civics/results#r-10","verified":false},{"id":"item_10","tag":"Source Extract","title":"Civic Distrust & Disinformation","summary":"A toxic combination of distrust in voting, a lack of civics literacy, and internet-era disinformation is allowing political entities to manipulate voters' worst instincts.","url":"https://theupskillinglabs.org/survey/civics/results#r-11","verified":false},{"id":"item_11","tag":"Source Extract","title":"Logistical & Educational Barriers to Voting","summary":"Voting is burdened by physical hurdles (childcare, time off work) and a lack of plain-language education on how local elections directly impact citizens' daily lives.","url":"https://theupskillinglabs.org/survey/civics/results#r-12","verified":false},{"id":"item_12","tag":"Source Extract","title":"The Death of Political Compromise","summary":"The electorate and activists are failing to recognize that compromise is a fundamental component of democracy, negatively impacting civic engagement.","url":"https://theupskillinglabs.org/survey/civics/results#r-13","verified":false},{"id":"item_13","tag":"Source Extract","title":"Civics Talent Pipeline Shortage","summary":"There is a noticeable shortage of talent to fill junior roles within the civics and elections workforce.","url":"https://theupskillinglabs.org/survey/civics/results#r-14","verified":false},{"id":"item_14","tag":"Source Extract","title":"False Transparency in Government","summary":"Government agencies and schools exhibit a disconnect with their constituencies, presenting a 'false flag' of transparency that leaves communities feeling ignored without understanding how aggregate sentiment is utilized.","url":"https://theupskillinglabs.org/survey/civics/results#r-15","verified":false},{"id":"item_15","tag":"Source Extract","title":"AI Bot Interference in Constituent Engagement","summary":"Artificial intelligence is being used to flood communication channels, rendering actual, organic constituent engagement ineffective.","url":"https://theupskillinglabs.org/survey/civics/results#r-16","verified":false},{"id":"item_16","tag":"Source Extract","title":"Hopelessness & Lack of Election Information","summary":"Voters feel hopeless and lack basic awareness of when local elections occur, relying on passive information like mailers or word of mouth.","url":"https://theupskillinglabs.org/survey/civics/results#r-17","verified":false},{"id":"item_17","tag":"Source Extract","title":"Structural Election Imbalances","summary":"The current electoral system features gerrymandering, dominant two-party privileges, and districts so large that politicians effectively choose their voters.","url":"https://theupskillinglabs.org/survey/civics/results#r-18","verified":false},{"id":"item_18","tag":"Source Extract","title":"Political Bubbles & NIMBYism","summary":"Citizens are highly polarized and isolated in social bubbles, proposing solutions or pushing back on reforms without understanding the broader impacts, trade-offs, or equity implications beyond their circles.","url":"https://theupskillinglabs.org/survey/civics/results#r-19","verified":false},{"id":"item_19","tag":"Source Extract","title":"Volunteer Burnout & Knowledge Transfer","summary":"Local volunteer roles, such as PTA leadership, fall on a few individuals. There is a need for tools to reduce the operational burden and retain institutional knowledge as volunteer leadership turns over.","url":"https://theupskillinglabs.org/survey/civics/results#r-19","verified":false},{"id":"item_20","tag":"Source Extract","title":"Aging Civic Leadership","summary":"Local civic organizations are heavily reliant on aging populations for leadership and membership, struggling to recruit younger generations who face competing career and family priorities.","url":"https://theupskillinglabs.org/survey/civics/results#r-20","verified":false},{"id":"item_21","tag":"Source Extract","title":"Uncontested Local Candidate Transparency","summary":"It is incredibly difficult to research the records of local election candidates, especially those running uncontested or without a communications budget, leaving voters feeling uninformed.","url":"https://theupskillinglabs.org/survey/civics/results#r-21","verified":false},{"id":"item_22","tag":"Source Extract","title":"Unexplained Ballot Roles","summary":"Even where ranked-choice mechanics were well taught, voters lack a plain-language breakdown of what each office on the ballot actually does, leaving first-time voters guessing at the roles they're electing.","url":"https://theupskillinglabs.org/survey/civics/results#r-22","verified":false},{"id":"item_23","tag":"Source Extract","title":"Performative Bipartisanship","summary":"Statements, town halls, and pledges perform collaboration without doing it; missing is a structured, sprint-like way for people who are supposed to disagree to define a shared problem and build something together.","url":"https://theupskillinglabs.org/survey/civics/results#r-23","verified":false},{"id":"item_24","tag":"Source Extract","title":"Loneliness as a Civic Problem","summary":"The social scaffolding that once created accountability in how people form relationships has dissolved with nothing replacing it — an isolation epidemic treated as a private matter rather than missing civic infrastructure.","url":"https://theupskillinglabs.org/survey/civics/results#r-24","verified":false},{"id":"item_25","tag":"Source Extract","title":"Outdated Small-Organization Elections","summary":"Unions, HOAs, and nonprofit boards run consequential elections on paper ballots and opaque spreadsheets; available tools serve incumbent leadership rather than transparent, verifiable results for members.","url":"https://theupskillinglabs.org/survey/civics/results#r-25","verified":false},{"id":"item_26","tag":"Source Extract","title":"Eroded Respect for Disagreement","summary":"People can no longer agree to disagree — basic respect for others and their opinions is missing from civic life, and active listening is rare.","url":"https://theupskillinglabs.org/survey/civics/results#r-26","verified":false},{"id":"item_27","tag":"Source Extract","title":"Misunderstood Pace of Government","summary":"Constituents misjudge who holds which powers and how fast government was designed to move, so legitimate slowness reads as failure — and stretched congressional staff can't give every issue the weight visitors expect.","url":"https://theupskillinglabs.org/survey/civics/results#r-27","verified":false},{"id":"item_28","tag":"Source Extract","title":"Cross-Jurisdiction Election Distrust","summary":"Election officials struggle to cut through fragmented information channels, and even people who trust their own town's elections increasingly distrust elections run by other cities and states.","url":"https://theupskillinglabs.org/survey/civics/results#r-28","verified":false},{"id":"item_29","tag":"Source Extract","title":"No Playbook for Good Citizenship","summary":"There is no clear guide to the daily, weekly, and monthly steps of being an informed, participating citizen — the information is scattered everywhere, and the whole project feels overwhelming.","url":"https://theupskillinglabs.org/survey/civics/results#r-29","verified":false},{"id":"item_30","tag":"Source Extract","title":"Broad Civic Disengagement","summary":"Many people are not engaged in local or national politics, don't know who the candidates are or what they stand for, and don't vote — despite candidate forums and get-out-the-vote efforts.","url":"https://theupskillinglabs.org/survey/civics/results#r-30","verified":false},{"id":"item_31","tag":"Source Extract","title":"Missing Dialogue Across Difference","summary":"People who hold differing views about a topic rarely talk with each other; new civic-engagement software is being tried, with only some success.","url":"https://theupskillinglabs.org/survey/civics/results#r-31","verified":false},{"id":"item_32","tag":"Source Extract","title":"Untapped Personal Megaphones","summary":"People forget how influential they can be with the biggest megaphone in history in the palm of their hand — but no one has cracked engagement at scale without it devolving into a rage machine.","url":"https://theupskillinglabs.org/survey/civics/results#r-32","verified":false},{"id":"item_33","tag":"Source Extract","title":"Low-Information Voting & Gerrymandering","summary":"Many voters don't research candidates before an election, while nationwide gerrymandering and proposed federal voting restrictions make the underlying playing field less fair.","url":"https://theupskillinglabs.org/survey/civics/results#r-33","verified":false},{"id":"item_34","tag":"Source Extract","title":"Ranked-Choice Confusion Persists","summary":"Voters remain confused about how ranked choice voting works and still lack clear, unbiased information about the candidates themselves.","url":"https://theupskillinglabs.org/survey/civics/results#r-34","verified":false},{"id":"item_35","tag":"Source Extract","title":"Anemic, Uneven Participation","summary":"Civic participation is thin, and only some voices get heard and lifted.","url":"https://theupskillinglabs.org/survey/civics/results#r-35","verified":false},{"id":"item_36","tag":"Source Extract","title":"Constituent Mail Black Hole","summary":"Letters and emails to representatives feel like talking into a void — heartfelt messages come back as generic, strategist-polished boilerplate.","url":"https://theupskillinglabs.org/survey/civics/results#r-36","verified":false},{"id":"item_37","tag":"Source Extract","title":"Entertainment Crowds Out Civic Attention","summary":"Citizens are too busy consuming entertainment to pay attention to neighborhood issues, kids' activities, or their government; outreach across multiple mediums still meets 'I don't have time'.","url":"https://theupskillinglabs.org/survey/civics/results#r-37","verified":false},{"id":"item_38","tag":"Source Extract","title":"Complacency & Candidate Deterrence","summary":"The average citizen doesn't feel they can make a difference, and good people stay away from political office because media can form any narrative it wants about them.","url":"https://theupskillinglabs.org/survey/civics/results#r-38","verified":false},{"id":"item_39","tag":"Source Extract","title":"Calls for Stricter Ballot ID","summary":"A demand that in-person voting require Real ID and that mail-in ballots require verified identification — described by the submitter as widely supported yet repeatedly rejected.","url":"https://theupskillinglabs.org/survey/civics/results#r-39","verified":false},{"id":"item_40","tag":"Source Extract","title":"Women Still Under-Represented","summary":"Women remain under-represented in political leadership, even as women run for the highest offices.","url":"https://theupskillinglabs.org/survey/civics/results#r-40","verified":false},{"id":"item_41","tag":"Source Extract","title":"Student Technology Access Gap","summary":"Students lack access to equipment for training, and school technology funding isn't keeping up; grassroots fundraisers and lobbying for federal funding only go so far.","url":"https://theupskillinglabs.org/survey/civics/results#r-41","verified":false},{"id":"item_42","tag":"Source Extract","title":"Mid-Decade Redistricting Shifts","summary":"California, Missouri, North Carolina, and Texas will use different congressional maps in 2026 than in 2024 due to voluntary mid-decade redistricting — unusual, and worth watching for how it shifts competitive-district counts.","url":"https://theupskillinglabs.org/survey/civics/results#r-42","verified":false},{"id":"item_43","tag":"Source Extract","title":"Accountability for Public Lies","summary":"Telling the truth — and holding liars accountable and responsible — is named as the missing piece of civic life.","url":"https://theupskillinglabs.org/survey/civics/results#r-43","verified":false},{"id":"item_44","tag":"Source Extract","title":"Cross-Agency Coordination Failure","summary":"Constituent problems take years to solve because coordinating local, federal, and neighboring-state agencies, private entities, and residents is nearly impossible — stakeholders claim jurisdiction for credit and duck it for problem-solving, at great cost to unpaid commissioners.","url":"https://theupskillinglabs.org/survey/civics/results#r-44","verified":false},{"id":"item_45","tag":"Source Extract","title":"Sidewalks vs. Micromobility","summary":"DC sidewalks are increasingly dangerous for elderly, young, and disabled pedestrians as motorized bikes and scooters — often ridden illegally — collide with the city's walkability promise; other cities' regulations may hold lessons.","url":"https://theupskillinglabs.org/survey/civics/results#r-45","verified":false},{"id":"item_46","tag":"Source Extract","title":"Representatives Without Accountability","summary":"Representatives don't seem to answer to the people, and replacing them changes little — new reps inherit the same voting patterns, with the two-party system and polarization at the crux.","url":"https://theupskillinglabs.org/survey/civics/results#r-46","verified":false},{"id":"item_47","tag":"Source Extract","title":"Last-Mile Resource Disconnect","summary":"Programs, grants, and services exist on paper, but communities often don't know about them or can't navigate them — the gap is grassroots outreach, trusted local partners, and hands-on navigation support, not new programs.","url":"https://theupskillinglabs.org/survey/civics/results#r-47","verified":false},{"id":"item_48","tag":"Source Extract","title":"Campus–Neighborhood Disconnection","summary":"There is no single, easy channel for a university community and its neighbors to trade information and opportunities — student jobs, local events, programs, and campus resources live in scattered slices.","url":"https://theupskillinglabs.org/survey/civics/results#r-48","verified":false}],"counts":{"signals":55,"cards":38,"themes":2,"patterns":9,"evidence":27,"connections":54}};
+
+/* ---------- build lookups ---------- */
+const byId = {};
+DATA.cards.forEach(c => byId[c.id] = c);
+const sigById = {};
+DATA.signals.forEach(s => sigById[s.id] = s);
+
+const TIER_NAME = {3:'Theme', 2:'Pattern', 1:'Evidence'};
+
+/* collect every signal underneath a card (recursive) */
+function collectSignals(card, seen){
+  seen = seen || new Set();
+  const out = [];
+  (card.children||[]).forEach(id => {
+    if (sigById[id]) { if(!seen.has(id)){ seen.add(id); out.push(sigById[id]); } }
+    else if (byId[id]) { collectSignals(byId[id], seen).forEach(s => out.push(s)); }
+  });
+  return out;
+}
+
+/* searchable text blob for a card and everything under it */
+function blob(card){
+  let t = (card.title+' '+card.desc).toLowerCase();
+  (card.children||[]).forEach(id => {
+    if (sigById[id]) t += ' ' + (sigById[id].title+' '+sigById[id].summary).toLowerCase();
+    else if (byId[id]) t += ' ' + blob(byId[id]);
+  });
+  return t;
+}
+
+/* ---------- render ---------- */
+function esc(s){ return (s||'').replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+
+function sigHTML(s){
+  return '<div class="sig"><span class="sdot"></span><div>'+
+    '<div class="sname">'+esc(s.title||'Untitled signal')+
+      (s.tag ? '<span class="stag">'+esc(s.tag)+'</span>' : '')+'</div>'+
+    (s.summary ? '<div class="ssum">'+esc(s.summary)+'</div>' : '')+
+  '</div></div>';
+}
+
+function nodeHTML(card, depth){
+  const kids = (card.children||[]);
+  const childCards = kids.filter(id => byId[id]).map(id => byId[id]);
+  const childSigs  = kids.filter(id => sigById[id]).map(id => sigById[id]);
+  const total = collectSignals(card).length;
+  const title = card.title ? esc(card.title) : 'Untitled card';
+  const cls = card.title ? 'node-title' : 'node-title untitled';
+
+  let body = '';
+  if (childCards.length) body += '<div class="ladder">'+childCards.map(c => nodeHTML(c, depth+1)).join('')+'</div>';
+  if (childSigs.length)  body += '<div style="margin-top:'+(childCards.length?'10px':'0')+'">'+childSigs.map(sigHTML).join('')+'</div>';
+  if (!body) body = '<p class="muted" style="margin:0">No children attached yet — this card is waiting on more signals.</p>';
+
+  return '<div class="node t'+card.tier+'" data-tier="'+card.tier+'" data-id="'+card.id+'">'+
+    '<button class="node-head">'+
+      '<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>'+
+      '<span class="txt">'+
+        '<span class="node-tier">'+TIER_NAME[card.tier]+'</span>'+
+        '<div class="'+cls+'">'+title+'</div>'+
+        (card.desc ? '<div class="node-desc">'+esc(card.desc)+'</div>' : '')+
+      '</span>'+
+      '<span class="node-meta">'+total+' signal'+(total===1?'':'s')+'</span>'+
+    '</button>'+
+    '<div class="node-body">'+body+'</div>'+
+  '</div>';
+}
+
+let filter = 'all', query = '';
+
+function render(){
+  const host = document.getElementById('ladder');
+  let roots = DATA.cards.filter(c => c.orphan);
+
+  if (filter !== 'all'){
+    const t = +filter;
+    roots = DATA.cards.filter(c => c.tier === t);
+  }
+  if (query){
+    roots = roots.filter(c => blob(c).includes(query));
+  }
+  roots.sort((a,b) => (b.tier - a.tier) || (a.title||'zzz').localeCompare(b.title||'zzz'));
+
+  host.innerHTML = roots.length
+    ? roots.map(c => nodeHTML(c,0)).join('')
+    : '<div class="empty">No cards match that search.</div>';
+
+  const shown = roots.length;
+  const sigs  = new Set(); roots.forEach(c => collectSignals(c).forEach(s => sigs.add(s.id)));
+  document.getElementById('count').textContent =
+    'Showing '+shown+' card'+(shown===1?'':'s')+' · '+sigs.size+' signal'+(sigs.size===1?'':'s')+
+    (query ? ' matching "'+query+'"' : '') + '.';
+
+  // auto-open when searching
+  if (query) host.querySelectorAll('.node').forEach(n => n.classList.add('open'));
+  else host.querySelectorAll('.node.t3').forEach(n => n.classList.add('open'));
+}
+
+document.getElementById('ladder').addEventListener('click', e => {
+  const h = e.target.closest('.node-head');
+  if (!h) return;
+  h.parentElement.classList.toggle('open');
+});
+
+document.querySelectorAll('.chip[data-f]').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('.chip[data-f]').forEach(x => x.classList.remove('on'));
+    b.classList.add('on'); filter = b.dataset.f; render();
+  };
+});
+
+document.getElementById('q').addEventListener('input', e => {
+  query = e.target.value.trim().toLowerCase(); render();
+});
+
+document.getElementById('expandAll').onclick = function(){
+  const nodes = document.querySelectorAll('#ladder .node');
+  const anyClosed = [...nodes].some(n => !n.classList.contains('open'));
+  nodes.forEach(n => n.classList.toggle('open', anyClosed));
+  this.textContent = anyClosed ? 'Collapse all' : 'Expand all';
+};
+
+/* signal tables */
+document.getElementById('sigTable').innerHTML = DATA.signals
+  .slice().sort((a,b) => (a.title||'').localeCompare(b.title||''))
+  .map(s => '<tr><td class="n">'+esc(s.title||'Untitled')+'</td><td>'+esc(s.summary||'—')+'</td><td>'+esc(s.tag||'—')+'</td></tr>')
+  .join('');
+
+/* unattached signals */
+const attached = new Set();
+DATA.cards.forEach(c => (c.children||[]).forEach(id => { if (sigById[id]) attached.add(id); }));
+const loose = DATA.signals.filter(s => !attached.has(s.id))
+  .sort((a,b) => (a.title||'').localeCompare(b.title||''));
+document.getElementById('unTable').innerHTML = loose
+  .map(s => '<tr><td class="n">'+esc(s.title||'Untitled')+'</td><td>'+esc(s.summary||'—')+'</td></tr>').join('');
+document.getElementById('unSum').firstChild.textContent =
+  loose.length+' signals not yet triangulated — raw material still on the table';
+
+/* timeline */
+const WEEKS = [
+  ['Week 0','Kickoff + Summit'],['Week 1','Problem Proposals'],['Week 2','Problem Voting'],
+  ['Week 3','Pod Creation'],['Week 4','Meet The Pods'],['Week 5','Experiments'],
+  ['Week 6','Project Pitches'],['Week 7','Project Voting'],['Week 8','Meet The Projects'],
+  ['Week 9','Mentor Intensive'],['Week 10','Mentor Intensive'],['Week 11','Rehearsal'],
+  ['Week 12','Showcase + Summit']
+];
+document.getElementById('tlTrack').innerHTML = WEEKS.map((w,i) => {
+  const active = i === 1;
+  const label = '<span class="label '+(i%2===0?'above':'below')+'"><span class="wk">'+w[0]+'</span><span class="name">'+w[1]+'</span></span>';
+  const circle = '<span class="circle">'+i+'</span>';
+  return '<div class="tl-node'+(active?' active':'')+'">'+(i%2===0 ? label+circle : circle+label)+'</div>';
+}).join('');
+
+render();
+</script>
+</body></html>
