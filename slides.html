@@ -151,8 +151,10 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
 .timeline-node .label .name{display:block;font-weight:600;color:var(--fog)}
 .timeline-node.active .label .name{color:var(--ink);font-weight:700}
 
-.brand{position:fixed;top:22px;left:28px;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fog-dim);z-index:5}
+.brand{position:fixed;top:22px;left:28px;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fog-dim);z-index:5;display:flex;align-items:center;gap:12px}
 .brand b{color:var(--ink)}
+.brand .report-link{text-transform:none;letter-spacing:normal;font-size:11.5px;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:20px;padding:4px 11px;transition:border-color .2s ease,background .2s ease}
+.brand .report-link:hover{border-color:var(--accent);background:var(--accent-dim)}
 .counter{position:fixed;top:22px;right:28px;font-size:11.5px;letter-spacing:.1em;color:var(--fog-dim);font-variant-numeric:tabular-nums;z-index:5}
 .counter b{color:var(--ink)}
 .progress{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:6;transition:width .5s ease}
@@ -163,11 +165,11 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
 .arrow{background:var(--card-bg);border:1px solid var(--line);color:var(--ink);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:17px;line-height:1;transition:border-color .2s ease,background .2s ease}
 .arrow:hover{border-color:var(--accent);background:var(--accent-dim)}
 
-@media (max-width:720px){.grid,.cols,.concept-grid{grid-template-columns:1fr}.slide{padding:12vh 7vw 14vh}.signal--corner{display:none}}
+@media (max-width:720px){.grid,.cols,.concept-grid{grid-template-columns:1fr}.slide{padding:12vh 7vw 14vh}.signal--corner{display:none}.brand b,.brand{font-size:10px}.brand .report-link{padding:3px 8px}}
 </style></head>
 <body>
 
-<div class="brand">The <b>Upskilling Labs</b> · Meet the Pod</div>
+<div class="brand">The <b>Upskilling Labs</b> · Meet the Pod <a class="report-link" href="./index.html">View the evidence →</a></div>
 <div class="counter"><b id="curNum">01</b> / 07</div>
 <div class="progress" id="progress" style="width:14.28%"></div>
 
