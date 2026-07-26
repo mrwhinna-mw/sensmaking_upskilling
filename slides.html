@@ -49,6 +49,30 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
 @keyframes signalPulse{0%{transform:scale(.35);opacity:.85}75%{opacity:0}100%{transform:scale(1.8);opacity:0}}
 .signal--corner{position:absolute;top:8vh;right:8vw;opacity:.85;z-index:0}
 
+
+/* ---------- ambient decor (all slides) ---------- */
+.decor{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.decor > *{position:absolute}
+.decor .st{color:var(--accent);opacity:.075}
+.decor .st.spin{animation:slowspin 46s linear infinite}
+.decor .st.drift{animation:drift 13s ease-in-out infinite alternate}
+.decor .st.tw{animation:tw 5.5s ease-in-out infinite}
+@keyframes slowspin{to{transform:rotate(360deg)}}
+@keyframes drift{from{transform:translateY(0)}to{transform:translateY(-16px)}}
+@keyframes tw{0%,100%{opacity:.05}50%{opacity:.16}}
+.decor .rings{width:170px;height:170px}
+.decor .rings i{position:absolute;inset:0;border:1.5px solid var(--accent);border-radius:50%;opacity:0;animation:signalPulse 4.6s ease-out infinite}
+.decor .rings i:nth-child(2){animation-delay:1.53s}
+.decor .rings i:nth-child(3){animation-delay:3.06s}
+.decor .rule{height:1px;background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.35),transparent)}
+.decor .orb{border-radius:50%;background:radial-gradient(circle at 35% 35%, rgba(var(--accent-rgb),.16), transparent 68%)}
+.slide-inner{position:relative;z-index:1}
+@media (prefers-reduced-motion:reduce){
+  .decor .st,.decor .rings i{animation:none}
+  .decor .rings i{opacity:.18}
+}
+@media (max-width:720px){.decor{display:none}}
+
 /* concept cards (paradox slide) */
 .concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 18px}
 .concept-card{border:1px solid var(--line);background:linear-gradient(180deg, rgba(var(--accent-rgb),.09), transparent 75%);border-radius:var(--radius);padding:20px 22px}
@@ -86,6 +110,7 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
 
 .btn{display:inline-block;border:1px solid var(--accent);color:var(--on-accent);background:var(--accent);font-weight:700;font-size:13.5px;padding:11px 24px;border-radius:999px;letter-spacing:.02em}
 
+.star-flourish.spin{animation:slowspin 60s linear infinite}
 .star-flourish{position:absolute;top:-8vh;right:-3vw;width:260px;height:260px;color:var(--accent);opacity:.09;z-index:0;pointer-events:none}
 
 .slide.join .slide-inner{max-width:min(1180px,92vw)}
@@ -131,6 +156,7 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
 <div class="progress" id="progress" style="width:14.28%"></div>
 
 <section class="slide cover active" data-i="0">
+  <div class="decor"><svg class="st spin" style="left:-4vw;bottom:-10vh;width:280px;height:280px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st tw" style="right:26vw;top:14vh;width:44px;height:44px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="orb" style="right:-4vw;top:30vh;width:340px;height:340px" aria-hidden="true"></span></div>
   <div class="signal signal--corner" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="ring"></span><span class="core"></span></div>
   <div class="slide-inner">
   <div class="eyebrow">Meet the Pod</div>
@@ -138,7 +164,9 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
   <div class="body"><p class="lede">Some people would engage — if they believed a given civic action was worth the effort. The barriers are too high and the incentives are too low: it takes real effort just to find out what's available and whether it matters — and when the feedback loop is broken, people stop trying because they never see the result of their effort. If I go to a protest, what actually happens?</p></div>
 </div></section>
 
-<section class="slide para" data-i="1"><div class="slide-inner">
+<section class="slide para" data-i="1">
+  <div class="decor"><svg class="st spin" style="right:-2vw;top:-6vh;width:230px;height:230px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st tw" style="left:4vw;bottom:8vh;width:46px;height:46px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="orb" style="right:12vw;bottom:-8vh;width:320px;height:320px" aria-hidden="true"></span></div>
+  <div class="slide-inner">
   <div class="eyebrow">The Paradox</div>
   <h1>Why This Stays Stuck</h1>
   <div class="body">
@@ -162,7 +190,9 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
   </div>
 </div></section>
 
-<section class="slide warrant" data-i="2"><div class="slide-inner">
+<section class="slide warrant" data-i="2">
+  <div class="decor"><span class="rings" style="right:5vw;bottom:6vh;opacity:.5" aria-hidden="true"><i></i><i></i><i></i></span><svg class="st drift" style="left:2vw;top:10vh;width:78px;height:78px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="rule" style="left:8vw;right:8vw;bottom:9vh" aria-hidden="true"></span></div>
+  <div class="slide-inner">
   <div class="eyebrow">How We Know</div>
   <h1>The Research Backs This Up</h1>
   <div class="body">
@@ -185,7 +215,9 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
   </div>
 </div></section>
 
-<section class="slide themes" data-i="3"><div class="slide-inner">
+<section class="slide themes" data-i="3">
+  <div class="decor"><svg class="st spin" style="left:-3vw;bottom:-8vh;width:250px;height:250px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st tw" style="right:8vw;top:12vh;width:40px;height:40px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="orb" style="left:20vw;top:-10vh;width:300px;height:300px" aria-hidden="true"></span></div>
+  <div class="slide-inner">
   <div class="eyebrow">What We Found</div>
   <h1>The Themes Beneath It</h1>
   <div class="body">
@@ -200,7 +232,9 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
   </div>
 </div></section>
 
-<section class="slide field" data-i="4"><div class="slide-inner">
+<section class="slide field" data-i="4">
+  <div class="decor"><svg class="st drift" style="right:3vw;top:8vh;width:120px;height:120px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st tw" style="left:5vw;bottom:12vh;width:52px;height:52px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="rule" style="left:10vw;right:10vw;top:7vh" aria-hidden="true"></span></div>
+  <div class="slide-inner">
   <div class="eyebrow">The Field</div>
   <h1>Voices We Still Need</h1>
   <div class="body">
@@ -228,7 +262,9 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
   </div>
 </div></section>
 
-<section class="slide testing" data-i="5"><div class="slide-inner">
+<section class="slide testing" data-i="5">
+  <div class="decor"><span class="rings" style="left:4vw;top:14vh;opacity:.4" aria-hidden="true"><i></i><i></i><i></i></span><svg class="st spin" style="right:-4vw;bottom:-6vh;width:240px;height:240px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="orb" style="right:30vw;top:-6vh;width:260px;height:260px" aria-hidden="true"></span></div>
+  <div class="slide-inner">
   <div class="eyebrow">Open Questions</div>
   <h1>The Assumptions Behind This Pitch</h1>
   <div class="body">
@@ -242,7 +278,8 @@ h1{font-family:var(--head-font);font-size:clamp(27px,4.3vw,44px);line-height:1.1
 </div></section>
 
 <section class="slide join" data-i="6">
-  <svg class="star-flourish" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg>
+  <div class="decor"><svg class="st tw" style="left:6vw;top:16vh;width:56px;height:56px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st drift" style="left:16vw;bottom:16vh;width:34px;height:34px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="rings" style="right:8vw;bottom:14vh;opacity:.45" aria-hidden="true"><i></i><i></i><i></i></span><span class="orb" style="left:-6vw;bottom:-10vh;width:300px;height:300px" aria-hidden="true"></span></div>
+  <svg class="star-flourish spin" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg>
   <div class="slide-inner">
   <div class="eyebrow" style="justify-content:center">Join Us</div>
   <h1>Build with the Civics &amp; Elections: "Closing the Loop" Pod</h1>

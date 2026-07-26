@@ -72,6 +72,29 @@ a{color:inherit}
 @keyframes sp{0%{transform:scale(.3);opacity:.8}75%{opacity:0}100%{transform:scale(1.6);opacity:0}}
 @media(prefers-reduced-motion:reduce){.signal .ring{animation:none;opacity:.25}}
 
+
+/* ---------- ambient decor ---------- */
+section{position:relative;overflow:hidden}
+section > .wrap{position:relative;z-index:1}
+.decor{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.decor > *{position:absolute}
+.decor .st{color:var(--accent);opacity:.07}
+.decor .st.spin{animation:slowspin 52s linear infinite}
+.decor .st.drift{animation:drift 14s ease-in-out infinite alternate}
+.decor .st.tw{animation:tw 6s ease-in-out infinite}
+@keyframes slowspin{to{transform:rotate(360deg)}}
+@keyframes drift{from{transform:translateY(0)}to{transform:translateY(-18px)}}
+@keyframes tw{0%,100%{opacity:.04}50%{opacity:.15}}
+.decor .rings{width:160px;height:160px}
+.decor .rings i{position:absolute;inset:0;border:1.5px solid var(--accent);border-radius:50%;opacity:0;animation:sp 4.8s ease-out infinite}
+.decor .rings i:nth-child(2){animation-delay:1.6s}
+.decor .rings i:nth-child(3){animation-delay:3.2s}
+.decor .orb{border-radius:50%;background:radial-gradient(circle at 35% 35%, rgba(var(--accent-rgb),.13), transparent 68%)}
+.footer .decor .st{color:var(--accent);opacity:.10}
+.footer .decor .orb{background:radial-gradient(circle at 35% 35%, rgba(var(--accent-rgb),.14), transparent 68%)}
+@media (prefers-reduced-motion:reduce){.decor .st,.decor .rings i{animation:none}.decor .rings i{opacity:.16}}
+@media (max-width:820px){.decor{display:none}}
+
 /* ---------- stat strip ---------- */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:44px}
 .stat{background:var(--paper);padding:20px 16px;text-align:center}
@@ -224,6 +247,7 @@ table.sig-table tr:last-child td{border-bottom:none}
 .footer .btn{border-color:var(--accent)}
 .footer-bottom{margin-top:34px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);display:flex;
   justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:11.5px;color:#8695ad}
+.star.spin{animation:slowspin 70s linear infinite}
 .star{position:absolute;right:-30px;top:-40px;width:230px;height:230px;color:var(--accent);opacity:.07;pointer-events:none}
 .footer .wrap{position:relative;overflow:hidden}
 </style></head>
@@ -242,7 +266,9 @@ table.sig-table tr:last-child td{border-bottom:none}
 </div></div>
 
 <!-- ================= HERO ================= -->
-<section class="hero"><div class="wrap">
+<section class="hero">
+  <div class="decor"><svg class="st spin" style="left:-60px;bottom:-70px;width:270px;height:270px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st tw" style="right:30%;top:70px;width:40px;height:40px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st drift" style="left:16%;top:40px;width:30px;height:30px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="orb" style="right:-70px;top:120px;width:330px;height:330px" aria-hidden="true"></span></div>
+  <div class="wrap">
   <div class="hero-grid">
     <div>
       <div class="eyebrow">Civics &amp; Elections · Closing the Loop Pod</div>
@@ -268,7 +294,9 @@ table.sig-table tr:last-child td{border-bottom:none}
 </div></section>
 
 <!-- ================= PROBLEM ================= -->
-<section id="problem"><div class="wrap">
+<section id="problem">
+  <div class="decor"><svg class="st spin" style="right:-40px;top:-50px;width:220px;height:220px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st tw" style="left:24px;bottom:60px;width:42px;height:42px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="orb" style="left:-60px;top:40%;width:280px;height:280px" aria-hidden="true"></span></div>
+  <div class="wrap">
   <div class="eyebrow">The Paradox</div>
   <h2>Why This Stays Stuck</h2>
   <p class="lede">Two forces work together to keep people out — and each one makes the other worse.</p>
@@ -295,7 +323,9 @@ table.sig-table tr:last-child td{border-bottom:none}
 </div></section>
 
 <!-- ================= THEMES ================= -->
-<section id="themes"><div class="wrap">
+<section id="themes">
+  <div class="decor"><svg class="st drift" style="left:-30px;top:40px;width:150px;height:150px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st tw" style="right:70px;bottom:50px;width:36px;height:36px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg></div>
+  <div class="wrap">
   <div class="eyebrow">What We Found</div>
   <h2>The Themes Beneath It</h2>
   <p class="lede">Everything in the evidence map below points at two missing pieces of information.</p>
@@ -314,7 +344,9 @@ table.sig-table tr:last-child td{border-bottom:none}
 </div></section>
 
 <!-- ================= EXPLORER ================= -->
-<section id="explorer"><div class="wrap">
+<section id="explorer">
+  <div class="decor"><span class="rings" style="right:40px;top:70px;opacity:.35" aria-hidden="true"><i></i><i></i><i></i></span><svg class="st spin" style="left:-50px;bottom:-40px;width:200px;height:200px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg></div>
+  <div class="wrap">
   <div class="eyebrow">The Evidence</div>
   <h2>Our Section of the Signal Pool</h2>
   <p class="lede">This is our slice of the wider Civics &amp; Elections pool — eleven field signals that climb into one theme about whether people can ever see their own civic action land.</p>
@@ -401,7 +433,9 @@ table.sig-table tr:last-child td{border-bottom:none}
 </div></section>
 
 <!-- ================= RESEARCH ================= -->
-<section id="research"><div class="wrap">
+<section id="research">
+  <div class="decor"><svg class="st spin" style="right:-30px;bottom:-30px;width:210px;height:210px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st tw" style="left:40px;top:70px;width:38px;height:38px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="orb" style="right:20%;top:-70px;width:260px;height:260px" aria-hidden="true"></span></div>
+  <div class="wrap">
   <div class="eyebrow">How We Know</div>
   <h2>The Research Backs This Up</h2>
   <p class="lede">This isn't just our read of the room — three separate bodies of research point the same direction.</p>
@@ -445,7 +479,9 @@ table.sig-table tr:last-child td{border-bottom:none}
 </div></section>
 
 <!-- ================= ASSUMPTIONS ================= -->
-<section id="assumptions"><div class="wrap">
+<section id="assumptions">
+  <div class="decor"><svg class="st drift" style="right:60px;top:50px;width:130px;height:130px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st tw" style="left:-10px;bottom:40px;width:52px;height:52px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg></div>
+  <div class="wrap">
   <div class="eyebrow">Open Questions</div>
   <h2>The Assumptions Behind This Pitch</h2>
   <p class="lede" style="margin-bottom:26px">We built this case on real evidence — but also on a few bets we haven't proven yet.</p>
@@ -455,7 +491,9 @@ table.sig-table tr:last-child td{border-bottom:none}
 </div></section>
 
 <!-- ================= APPENDIX ================= -->
-<section id="appendix"><div class="wrap">
+<section id="appendix">
+  <div class="decor"><svg class="st spin" style="left:-40px;top:-40px;width:190px;height:190px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="rings" style="right:60px;bottom:60px;opacity:.28" aria-hidden="true"><i></i><i></i><i></i></span></div>
+  <div class="wrap">
   <div class="eyebrow">The Full Record</div>
   <h2>Method &amp; Appendix</h2>
   <p class="lede" style="margin-bottom:26px">Nothing here is hidden — it's just tucked away so the main story stays readable. Open any section for the underlying detail.</p>
@@ -518,8 +556,10 @@ table.sig-table tr:last-child td{border-bottom:none}
 </div></section>
 
 <!-- ================= NEXT / JOIN ================= -->
-<section id="next" class="footer"><div class="wrap">
-  <svg class="star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg>
+<section id="next" class="footer">
+  <div class="decor"><svg class="st tw" style="left:5%;top:80px;width:54px;height:54px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><svg class="st drift" style="left:14%;bottom:90px;width:32px;height:32px" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg><span class="rings" style="right:8%;bottom:80px;opacity:.4" aria-hidden="true"><i></i><i></i><i></i></span><span class="orb" style="left:-70px;bottom:-70px;width:300px;height:300px" aria-hidden="true"></span></div>
+  <div class="wrap">
+  <svg class="star spin" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.4 7.1.6-5.4 4.6 1.7 6.9L12 16.9 5.7 20.5l1.7-6.9L2 9l7.1-.6L12 2z"/></svg>
   <div class="eyebrow">Join Us</div>
   <h2>Build with the Civics &amp; Elections: "Closing the Loop" Pod</h2>
   <p class="sub-tag">So people can see their civic action land.</p>
