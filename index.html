@@ -737,7 +737,7 @@ const WEEKS = [
   ['Week 12','Showcase + Summit']
 ];
 document.getElementById('tlTrack').innerHTML = WEEKS.map((w,i) => {
-  const active = i === 1;
+  const active = i === 3;
   const label = '<span class="label '+(i%2===0?'above':'below')+'"><span class="wk">'+w[0]+'</span><span class="name">'+w[1]+'</span></span>';
   const circle = '<span class="circle">'+i+'</span>';
   return '<div class="tl-node'+(active?' active':'')+'">'+(i%2===0 ? label+circle : circle+label)+'</div>';
